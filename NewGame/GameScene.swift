@@ -19,7 +19,7 @@ struct BitMasks {
 class GameScene: SKScene {
 
     var starShip: SKSpriteNode!
-    var planet: SKSpriteNode!
+    var planet: Planet!
     
     var bulletTimerShot: Timer?
     var delayToShot = 0.5
@@ -98,11 +98,8 @@ class GameScene: SKScene {
     }
     
     func createPlanet() {
-        planet = Planet.createPlanet(frame: frame)
-        let numberLabel = Planet.setLabelOnPlanet()
-        numberLabel.text = "20"
+        planet = PlanetFactory.createPlanet(frame: frame)
 
-        planet.addChild(numberLabel)
         addChild(planet)
         
     }
@@ -153,11 +150,7 @@ extension GameScene: SKPhysicsContactDelegate {
             contact.bodyA.categoryBitMask == BitMasks.bullet &&
             contact.bodyB.categoryBitMask == BitMasks.planet {
             
-            if let planetLabel = planet.children[0] as? SKLabelNode {
-                var number = Int(planetLabel.text!)
-                planetLabel.text = "\(number! - 1)"
-                    
-            }
+            planet.lives -= 1
         }
     }
 }

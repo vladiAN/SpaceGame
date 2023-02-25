@@ -10,23 +10,50 @@ import SpriteKit
 
 class Planet: SKSpriteNode {
     
-    static func createPlanet(frame: CGRect) -> SKSpriteNode {
+    init() {
+        let randomInt = Int.random(in: 1...11)
+        let texture = SKTexture(imageNamed: "planet\(randomInt)")
+        let size = CGSize(width: 100, height: 100)
+        super.init(texture: texture, color: .clear, size: size)
+        self.physicsBody = SKPhysicsBody(circleOfRadius: size.width / 2)
+        self.physicsBody?.affectedByGravity = false
+        self.physicsBody?.isDynamic = false
+        self.physicsBody?.restitution = 1
+        self.physicsBody?.linearDamping = 0
+        self.physicsBody?.categoryBitMask = BitMasks.planet
+        self.physicsBody?.contactTestBitMask = BitMasks.borderBody
+        self.physicsBody?.collisionBitMask = 1
         
-        let arrayOfPlanets = Array(1...11).map { int in
-            SKSpriteNode(imageNamed: "planet\(int)")
+        labelNumber.fontName = "HelveticaNeue-Bold"
+        labelNumber.fontSize = 40
+        labelNumber.position = CGPoint.zero
+        labelNumber.verticalAlignmentMode = .center
+        labelNumber.horizontalAlignmentMode = .center
+        labelNumber.text = "20"
+        labelNumber.zPosition = 10
+        
+        self.addChild(labelNumber)
+    }
+    
+    let labelNumber = SKLabelNode(text: "")
+
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    var lives = 20 {
+        didSet {
+            labelNumber.text = "\(lives)"
         }
-        
-        let randomInt = Int.random(in: 0...10)
-        let randomPlanet = arrayOfPlanets[randomInt]
-        
-        randomPlanet.physicsBody = SKPhysicsBody(circleOfRadius: 50)
-        randomPlanet.physicsBody?.affectedByGravity = false
-        randomPlanet.physicsBody?.isDynamic = false
-        randomPlanet.physicsBody?.restitution = 1
-        randomPlanet.physicsBody?.linearDamping = 0
-        randomPlanet.physicsBody?.categoryBitMask = BitMasks.planet
-        randomPlanet.physicsBody?.contactTestBitMask = BitMasks.borderBody
-        randomPlanet.physicsBody?.collisionBitMask = 1
+    }
+
+}
+
+class PlanetFactory: SKSpriteNode {
+    
+    static func createPlanet(frame: CGRect) -> Planet {
+
+        let randomPlanet = Planet()
         
         let randomBool = Bool.random()
         let moveDuration = 2.0
@@ -54,18 +81,7 @@ class Planet: SKSpriteNode {
 
         let sequence = SKAction.sequence([moveAction, setPhysicsBody, repeatRotate])
         randomPlanet.run(sequence)
-        
+
         return randomPlanet
     }
-    
-    static func setLabelOnPlanet() -> SKLabelNode {
-        let labelNumber = SKLabelNode(text: "")
-        labelNumber.fontName = "HelveticaNeue-Bold"
-        labelNumber.fontSize = 40
-        labelNumber.position = CGPoint.zero
-        labelNumber.verticalAlignmentMode = .center
-        labelNumber.horizontalAlignmentMode = .center
-        return labelNumber
-    }
-    
 }

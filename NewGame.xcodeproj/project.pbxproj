@@ -16,7 +16,7 @@
 		C0568D0329A4C88C00BB9181 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0568D0229A4C88C00BB9181 /* Assets.xcassets */; };
 		C0568D0629A4C88C00BB9181 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C0568D0429A4C88C00BB9181 /* LaunchScreen.storyboard */; };
 		C0E50A8329A6234D00DA8F45 /* StarShip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E50A8229A6234D00DA8F45 /* StarShip.swift */; };
-		C0E50A8729A6620C00DA8F45 /* Planet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E50A8629A6620C00DA8F45 /* Planet.swift */; };
+		C0E50A8729A6620C00DA8F45 /* PlanetFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E50A8629A6620C00DA8F45 /* PlanetFactory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,7 +30,7 @@
 		C0568D0229A4C88C00BB9181 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C0568D0529A4C88C00BB9181 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C0E50A8229A6234D00DA8F45 /* StarShip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarShip.swift; sourceTree = "<group>"; };
-		C0E50A8629A6620C00DA8F45 /* Planet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planet.swift; sourceTree = "<group>"; };
+		C0E50A8629A6620C00DA8F45 /* PlanetFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetFactory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,7 +67,7 @@
 				C0568CF729A4C88A00BB9181 /* GameScene.sks */,
 				C0568CF929A4C88A00BB9181 /* Actions.sks */,
 				C0568CFB29A4C88A00BB9181 /* GameScene.swift */,
-				C0E50A8629A6620C00DA8F45 /* Planet.swift */,
+				C0E50A8629A6620C00DA8F45 /* PlanetFactory.swift */,
 				C0E50A8229A6234D00DA8F45 /* StarShip.swift */,
 				C0568CFD29A4C88A00BB9181 /* GameViewController.swift */,
 				C0568CFF29A4C88A00BB9181 /* Main.storyboard */,
@@ -154,7 +154,7 @@
 				C0568CFE29A4C88A00BB9181 /* GameViewController.swift in Sources */,
 				C0568CF629A4C88A00BB9181 /* AppDelegate.swift in Sources */,
 				C0E50A8329A6234D00DA8F45 /* StarShip.swift in Sources */,
-				C0E50A8729A6620C00DA8F45 /* Planet.swift in Sources */,
+				C0E50A8729A6620C00DA8F45 /* PlanetFactory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
