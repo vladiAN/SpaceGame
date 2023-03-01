@@ -10,7 +10,7 @@ import SpriteKit
 
 class Planet: SKSpriteNode {
     
-    let sizePlanet: CGFloat = 100
+    let originalSizePlanet: CGFloat = 100
     
     init(size: CGSize) {
         let randomInt = Int.random(in: 1...11)
@@ -50,11 +50,11 @@ class Planet: SKSpriteNode {
     
     func replaceWithTwoSmaller() {
         
-        let planetDecayFactor = 0.8
+        let planetDecayFactor: CGFloat = 0.8
         
         let sizeCildPlanet = CGSize(width: self.size.width * planetDecayFactor, height: self.size.width * planetDecayFactor)
         
-        if sizeCildPlanet.width >= sizePlanet * 0.64 {
+        if sizeCildPlanet.width >= originalSizePlanet * planetDecayFactor * planetDecayFactor {
             let childPlanetLeft = Planet(size: sizeCildPlanet)
             let childPlanetRight = Planet(size: sizeCildPlanet)
             

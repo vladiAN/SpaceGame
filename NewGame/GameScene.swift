@@ -22,7 +22,7 @@ class GameScene: SKScene {
     var planet: Planet!
     var bullet: SKSpriteNode!
     var bulletTimerShot: Timer?
-    var delayToShot = 0.3
+    var delayToShot = 0.1
 
     override func didMove(to view: SKView) {
         scene?.size = UIScreen.main.bounds.size
@@ -136,6 +136,9 @@ extension GameScene: SKPhysicsContactDelegate {
             planet.lives -= 1
             if planet.lives < 1 {
                 planet.replaceWithTwoSmaller()
+                if self.children.filter({ $0 is Planet}).count == 2 {
+                   createPlanet()
+                }
             }
         }
         
