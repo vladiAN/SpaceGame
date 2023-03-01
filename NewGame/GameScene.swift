@@ -10,7 +10,7 @@ import GameplayKit
 
 struct BitMasks {
     static let borderBody: UInt32 = 1
-    static let spaseShip: UInt32 = 2
+    static let starShip: UInt32 = 2
     static let planet: UInt32 = 4
     static let platform: UInt32 = 8
     static let bullet: UInt32 = 16
@@ -20,9 +20,9 @@ class GameScene: SKScene {
 
     var starShip: SKSpriteNode!
     var planet: Planet!
-    
+    var bullet: SKSpriteNode!
     var bulletTimerShot: Timer?
-    var delayToShot = 0.5
+    var delayToShot = 0.3
 
     override func didMove(to view: SKView) {
         scene?.size = UIScreen.main.bounds.size
@@ -70,11 +70,10 @@ class GameScene: SKScene {
         background.size = CGSize(width: self.size.width, height: self.size.height)
         background.zPosition = -100
         addChild(background)
-        
     }
     
     @objc func setBullet() {
-        let bullet = SKSpriteNode(imageNamed: "bullet")
+        bullet = SKSpriteNode(imageNamed: "bullet")
         bullet.size = CGSize(width: 20, height: 20)
         bullet.position.y = frame.midY - 260
         bullet.position.x = starShip.position.x
@@ -98,14 +97,11 @@ class GameScene: SKScene {
     }
     
     func createPlanet() {
-        planet = PlanetFactory.createPlanet(frame: frame)
-
+        planet = PlanetFactory.createNewPlanet(frame: frame)
         addChild(planet)
         
     }
-    
-    
-    
+
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let touchLocation = touch.location(in: self)
@@ -127,30 +123,36 @@ class GameScene: SKScene {
         bulletTimerShot?.invalidate()
         bulletTimerShot = nil
     }
-
     
 }
 
 extension GameScene: SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
         
-        //contact planet with borderBody
+        guard let bodyNotPlanet = [contact.bodyA, contact.bodyB].first(where: { $0.categoryBitMask != BitMasks.planet}) else { return }
+        
+        if bodyNotPlanet.categoryBitMask == BitMasks.bullet {
+            bodyNotPlanet.node?.removeFromParent()
+            planet.lives -= 1
+            if planet.lives < 1 {
+                planet.replaceWithTwoSmaller()
+            }
+        }
+        
+        guard let bodyPlanet = [contact.bodyA, contact.bodyB].first(where: { $0.categoryBitMask == BitMasks.planet}) else { return }
+        
+        if let contactPlanet = bodyPlanet.node as? Planet {
+            planet = contactPlanet
+        }
+        
         if contact.bodyA.categoryBitMask == BitMasks.planet &&
             contact.bodyB.categoryBitMask == BitMasks.borderBody ||
             contact.bodyA.categoryBitMask == BitMasks.borderBody &&
             contact.bodyB.categoryBitMask == BitMasks.planet {
-            planet.position.x < frame.midX ?
-            planet.physicsBody?.applyImpulse(CGVector(dx: 30, dy: 0)) :
-            planet.physicsBody?.applyImpulse(CGVector(dx: -30, dy: 0))
-        }
-        
-        //contact bullet with planet
-        if contact.bodyA.categoryBitMask == BitMasks.planet &&
-            contact.bodyB.categoryBitMask == BitMasks.bullet ||
-            contact.bodyA.categoryBitMask == BitMasks.bullet &&
-            contact.bodyB.categoryBitMask == BitMasks.planet {
             
-            planet.lives -= 1
+            planet.position.x < frame.midX ?
+            planet.physicsBody?.applyImpulse(CGVector(dx: 10, dy: 0)) :
+            planet.physicsBody?.applyImpulse(CGVector(dx: -10, dy: 0))
         }
     }
 }

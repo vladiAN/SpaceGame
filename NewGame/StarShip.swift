@@ -10,13 +10,17 @@ import SpriteKit
 
 class StarShip: SKSpriteNode {
     static func setStarship(at point: CGPoint) -> SKSpriteNode {
+        let starShipWidth: CGFloat = 60
+        let starShipHeight: CGFloat = 70
         let starShipTexture = SKTexture(imageNamed: "ship")
         let starShip = SKSpriteNode(texture: starShipTexture)
-        let starshipSize = CGSize(width: 100, height: 100)
+        let starshipSize = CGSize(width: starShipWidth, height: starShipHeight)
         starShip.size = CGSize(width: starshipSize.width, height: starshipSize.height)
         starShip.position = point
-       // starShip.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 100, height: 100))
+        starShip.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: starShipWidth, height: starShipHeight))
         starShip.physicsBody?.isDynamic = false
+        starShip.physicsBody?.categoryBitMask = BitMasks.starShip
+        //starShip.physicsBody?.collisionBitMask = BitMasks.borderBody
         return starShip
     }
 }
