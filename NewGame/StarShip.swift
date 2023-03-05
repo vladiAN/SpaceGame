@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class StarShip: SKSpriteNode {
+class StarShip {
     static func setStarship(at point: CGPoint) -> SKSpriteNode {
         let starShipWidth: CGFloat = 60
         let starShipHeight: CGFloat = 70

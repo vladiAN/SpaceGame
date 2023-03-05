@@ -70,7 +70,6 @@ class Planet: SKSpriteNode {
             removeFromParent()
         }
         
-        
     }
     
     func setChildPlanet(childPlanet: Planet, childPlanetLeft: Bool) {

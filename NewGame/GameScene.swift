@@ -33,7 +33,7 @@ class GameScene: SKScene {
         
         setScene()
         
-        musicSoundEffects.playBackgroundMusic()
+        //musicSoundEffects.playBackgroundMusic()
         musicSoundEffects.loadSoundEffects()
     }
     
@@ -44,7 +44,7 @@ class GameScene: SKScene {
         starShip = StarShip.setStarship(at: CGPoint(x: frame.midX, y: frame.minY + 100))
         addChild(starShip)
         
-        createPlanet()
+        //createPlanet()
         setPlatform()
     }
     
