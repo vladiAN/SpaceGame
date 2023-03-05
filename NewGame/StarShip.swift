@@ -20,7 +20,6 @@ class StarShip: SKSpriteNode {
         starShip.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: starShipWidth, height: starShipHeight))
         starShip.physicsBody?.isDynamic = false
         starShip.physicsBody?.categoryBitMask = BitMasks.starShip
-        //starShip.physicsBody?.collisionBitMask = BitMasks.borderBody
         return starShip
     }
 }

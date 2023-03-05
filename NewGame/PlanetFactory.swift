@@ -22,8 +22,8 @@ class Planet: SKSpriteNode {
         self.physicsBody?.restitution = 1
         self.physicsBody?.linearDamping = 0
         self.physicsBody?.categoryBitMask = BitMasks.planet
-        self.physicsBody?.contactTestBitMask = BitMasks.borderBody
-        self.physicsBody?.collisionBitMask = BitMasks.platform
+        self.physicsBody?.contactTestBitMask = BitMasks.borderBody | BitMasks.bullet | BitMasks.platform
+        self.physicsBody?.collisionBitMask = BitMasks.starShip
         
         labelNumber.fontName = "HelveticaNeue-Bold"
         labelNumber.fontSize = 40
@@ -61,12 +61,16 @@ class Planet: SKSpriteNode {
             setChildPlanet(childPlanet: childPlanetLeft, childPlanetLeft: true)
             setChildPlanet(childPlanet: childPlanetRight, childPlanetLeft: false)
             
+            MusicManager.shared.soundEffects(fileName: "ballSeparation")
+            
             parent?.addChild(childPlanetLeft)
             parent?.addChild(childPlanetRight)
             removeFromParent()
         } else {
             removeFromParent()
         }
+        
+        
     }
     
     func setChildPlanet(childPlanet: Planet, childPlanetLeft: Bool) {
@@ -81,11 +85,33 @@ class Planet: SKSpriteNode {
             childPlanet.physicsBody?.isDynamic = true
             childPlanet.physicsBody?.applyImpulse(impulseVector)
             childPlanet.physicsBody?.categoryBitMask = BitMasks.planet
-            childPlanet.physicsBody?.contactTestBitMask = BitMasks.borderBody
+            childPlanet.physicsBody?.contactTestBitMask = BitMasks.borderBody | BitMasks.platform | BitMasks.bullet
             childPlanet.physicsBody?.collisionBitMask = BitMasks.borderBody
         }
         childPlanet.run(setPhysicsBody)
     }
+    
+    func impulsFromBorder(planetOnTheLeft: Bool) {
+        
+        let forceOfPush: Int
+        
+        switch self.size.width {
+        case 100...:
+            forceOfPush = 30
+        case 80..<100:
+            forceOfPush = 20
+        case ..<80:
+            forceOfPush = 10
+        default:
+            return
+        }
+        
+        planetOnTheLeft ?
+        self.physicsBody?.applyImpulse(CGVector(dx: forceOfPush, dy: 0)) :
+        self.physicsBody?.applyImpulse(CGVector(dx: -forceOfPush, dy: 0))
+    }
+    
+    
     
 }
 

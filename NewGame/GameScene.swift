@@ -23,6 +23,8 @@ class GameScene: SKScene {
     var bullet: SKSpriteNode!
     var bulletTimerShot: Timer?
     var delayToShot = 0.1
+    
+    let musicSoundEffects = MusicManager.shared
 
     override func didMove(to view: SKView) {
         scene?.size = UIScreen.main.bounds.size
@@ -30,6 +32,9 @@ class GameScene: SKScene {
         physicsWorld.contactDelegate = self
         
         setScene()
+        
+        musicSoundEffects.playBackgroundMusic()
+        musicSoundEffects.loadSoundEffects()
     }
     
     func setScene() {
@@ -48,21 +53,23 @@ class GameScene: SKScene {
         borderBody.friction =  0
         self.physicsBody = borderBody
         self.physicsBody?.categoryBitMask = BitMasks.borderBody
-        self.physicsBody?.contactTestBitMask = BitMasks.planet
     }
     
     func setPlatform() {
-        let platform = SKSpriteNode(imageNamed: "platform")
-        platform.position = CGPoint(x: frame.midX, y: frame.minY + (platform.size.height / 2))
+        let platformImage = SKSpriteNode(imageNamed: "platform")
+        platformImage.position = CGPoint(x: frame.midX, y: frame.minY + (platformImage.size.height / 2))
+        platformImage.zPosition = -1
+        
+        let platform = SKShapeNode(rectOf: CGSize(width: frame.width - 10, height: 0))
+        platform.position = CGPoint(x: frame.midX, y: starShip.frame.minY)
+        platform.physicsBody = SKPhysicsBody(rectangleOf: platform.frame.size)
+        platform.physicsBody?.isDynamic = false
+        platform.physicsBody?.affectedByGravity = false
+        platform.physicsBody?.categoryBitMask = BitMasks.platform
         platform.zPosition = -1
         
-        let groundBorder = SKShapeNode(rectOf: CGSize(width: frame.width, height: 0))
-        groundBorder.position = CGPoint(x: frame.midX, y: starShip.frame.minY)
-        groundBorder.physicsBody = SKPhysicsBody(rectangleOf: groundBorder.frame.size)
-        groundBorder.physicsBody?.isDynamic = false
-        
-        addChild(groundBorder)
         addChild(platform)
+        addChild(platformImage)
     }
     
     func setBackground() {
@@ -80,7 +87,6 @@ class GameScene: SKScene {
         
         bullet.physicsBody = SKPhysicsBody(circleOfRadius: bullet.size.width / 2)
         bullet.physicsBody?.categoryBitMask = BitMasks.bullet
-        bullet.physicsBody?.contactTestBitMask = BitMasks.planet
         bullet.physicsBody?.collisionBitMask = 0
         bullet.physicsBody?.affectedByGravity = false
         bullet.physicsBody?.isDynamic = false
@@ -89,6 +95,8 @@ class GameScene: SKScene {
         bullet.zPosition = -1
         
         addChild(bullet)
+        
+        musicSoundEffects.soundEffects(fileName: "shot")
         
         let moveUpAction = SKAction.moveBy(x: 0, y: self.frame.height, duration: 1.0)
         let removeBullet = SKAction.removeFromParent()
@@ -101,7 +109,8 @@ class GameScene: SKScene {
         addChild(planet)
         
     }
-
+    
+    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let touchLocation = touch.location(in: self)
@@ -117,6 +126,7 @@ class GameScene: SKScene {
                                            selector: #selector(setBullet),
                                            userInfo: nil,
                                            repeats: true)
+        
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -152,10 +162,14 @@ extension GameScene: SKPhysicsContactDelegate {
             contact.bodyB.categoryBitMask == BitMasks.borderBody ||
             contact.bodyA.categoryBitMask == BitMasks.borderBody &&
             contact.bodyB.categoryBitMask == BitMasks.planet {
-            
-            planet.position.x < frame.midX ?
-            planet.physicsBody?.applyImpulse(CGVector(dx: 10, dy: 0)) :
-            planet.physicsBody?.applyImpulse(CGVector(dx: -10, dy: 0))
+            planet.impulsFromBorder(planetOnTheLeft: planet.position.x < frame.midX)
+        }
+        
+        if contact.bodyA.categoryBitMask == BitMasks.planet &&
+            contact.bodyB.categoryBitMask == BitMasks.platform ||
+            contact.bodyA.categoryBitMask == BitMasks.platform &&
+            contact.bodyB.categoryBitMask == BitMasks.planet {
+            musicSoundEffects.soundEffects(fileName: "ballDrop")
         }
     }
 }
