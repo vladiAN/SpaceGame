@@ -34,7 +34,7 @@ class GameScene: SKScene {
         setScene()
         
         //musicSoundEffects.playBackgroundMusic()
-        musicSoundEffects.loadSoundEffects()
+        //musicSoundEffects.loadSoundEffects()
     }
     
     func setScene() {

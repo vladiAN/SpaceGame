@@ -16,30 +16,39 @@ class MusicManager {
     var audioPlayer: AVAudioPlayer?
     var soundEffectsDict: [String: AVAudioPlayer] = [:]
     
+    
+    
     func playBackgroundMusic() {
-        if let bundle = Bundle.main.path(forResource: "background-music", ofType: "mp3") {
-            let backgroundMusic = NSURL(fileURLWithPath: bundle)
-            do {
-                audioPlayer = try AVAudioPlayer(contentsOf: backgroundMusic as URL)
-                guard let audioPlayer = audioPlayer else { return }
-                audioPlayer.numberOfLoops = -1
-                audioPlayer.play()
-            } catch {
-                print("Cloud not load background music file")
+        let backgroundMusicIsActive = UserDefaultManager.shared.backgroundMusic
+        if backgroundMusicIsActive {
+            if let bundle = Bundle.main.path(forResource: "background-music", ofType: "mp3") {
+                let backgroundMusic = NSURL(fileURLWithPath: bundle)
+                do {
+                    audioPlayer = try AVAudioPlayer(contentsOf: backgroundMusic as URL)
+                    guard let audioPlayer = audioPlayer else { return }
+                    audioPlayer.numberOfLoops = -1
+                    audioPlayer.play()
+                } catch {
+                    print("Cloud not load background music file")
+                }
             }
+        } else {
+            audioPlayer?.stop()
+            audioPlayer = nil
         }
     }
     
     func stopbackgroundMusic() {
-        audioPlayer?.stop()
-        audioPlayer = nil
+        
     }
     
     func loadSoundEffects() {
+        
         let soundEffectsFiles = [
             "shot",
             "ballDrop",
-            "ballSeparation"
+            "ballSeparation",
+            "click"
         ]
         
         for file in soundEffectsFiles {
@@ -57,10 +66,14 @@ class MusicManager {
     }
     
     func soundEffects(fileName: String) {
-        if let sound = soundEffectsDict[fileName] {
-            sound.currentTime = 0
-            sound.play()
-        }
+        let musicEffectIsActive = UserDefaultManager.shared.musicEffects
+        print(musicEffectIsActive)
+        if musicEffectIsActive {
+            if let sound = soundEffectsDict[fileName] {
+                sound.currentTime = 0
+                sound.play()
+            }
+        } else { return }
     }
     
 }
