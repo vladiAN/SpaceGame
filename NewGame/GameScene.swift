@@ -31,15 +31,14 @@ class GameScene: SKScene {
         scene?.size = view.frame.size
         
         physicsWorld.contactDelegate = self
-        
-        self.backgroundColor = UIColor(named: "background2")!
+
         
         setScene()
     }
     
     func setScene() {
         setBorderBody()
-//        setBackground()
+       //setBackground()
         
         starShip = StarShip.setStarship(at: CGPoint(x: frame.midX, y: frame.minY + 100))
         addChild(starShip)
@@ -66,19 +65,18 @@ class GameScene: SKScene {
         platform.physicsBody?.isDynamic = false
         platform.physicsBody?.affectedByGravity = false
         platform.physicsBody?.categoryBitMask = BitMasks.platform
-        //platform.zPosition = -1
         
         addChild(platform)
         addChild(platformImage)
     }
     
-//    func setBackground() {
-//        let background = SKSpriteNode(imageNamed: "background1")
-//        background.size = CGSize(width: self.size.width, height: self.size.height - platformImage.frame.size.height)
-//        background.position.y = platformImage.frame.maxY
-//        background.zPosition = -100
-//        addChild(background)
-//    }
+    func setBackground() {
+        let background = SKSpriteNode(imageNamed: "background1")
+        background.size = CGSize(width: self.size.width, height: self.size.height - platformImage.frame.size.height)
+        background.position.y = platformImage.frame.maxY
+        background.zPosition = -100
+        addChild(background)
+    }
     
     @objc func setBullet() {
         bullet = SKSpriteNode(imageNamed: "bullet")
