@@ -23,28 +23,28 @@ class GameScene: SKScene {
     var bullet: SKSpriteNode!
     var bulletTimerShot: Timer?
     var delayToShot = 0.1
+    let platformImage = SKSpriteNode(imageNamed: "platform")
     
     let musicSoundEffects = MusicManager.shared
-
+    
     override func didMove(to view: SKView) {
-        scene?.size = UIScreen.main.bounds.size
+        scene?.size = view.frame.size
         
         physicsWorld.contactDelegate = self
         
-        setScene()
+        self.backgroundColor = UIColor(named: "background2")!
         
-        //musicSoundEffects.playBackgroundMusic()
-        //musicSoundEffects.loadSoundEffects()
+        setScene()
     }
     
     func setScene() {
         setBorderBody()
-        setBackground()
+//        setBackground()
         
         starShip = StarShip.setStarship(at: CGPoint(x: frame.midX, y: frame.minY + 100))
         addChild(starShip)
         
-        //createPlanet()
+        createPlanet()
         setPlatform()
     }
     
@@ -56,7 +56,7 @@ class GameScene: SKScene {
     }
     
     func setPlatform() {
-        let platformImage = SKSpriteNode(imageNamed: "platform")
+        
         platformImage.position = CGPoint(x: frame.midX, y: frame.minY + (platformImage.size.height / 2))
         platformImage.zPosition = -1
         
@@ -66,18 +66,19 @@ class GameScene: SKScene {
         platform.physicsBody?.isDynamic = false
         platform.physicsBody?.affectedByGravity = false
         platform.physicsBody?.categoryBitMask = BitMasks.platform
-        platform.zPosition = -1
+        //platform.zPosition = -1
         
         addChild(platform)
         addChild(platformImage)
     }
     
-    func setBackground() {
-        let background = SKSpriteNode(imageNamed: "background")
-        background.size = CGSize(width: self.size.width, height: self.size.height)
-        background.zPosition = -100
-        addChild(background)
-    }
+//    func setBackground() {
+//        let background = SKSpriteNode(imageNamed: "background1")
+//        background.size = CGSize(width: self.size.width, height: self.size.height - platformImage.frame.size.height)
+//        background.position.y = platformImage.frame.maxY
+//        background.zPosition = -100
+//        addChild(background)
+//    }
     
     @objc func setBullet() {
         bullet = SKSpriteNode(imageNamed: "bullet")
@@ -96,7 +97,7 @@ class GameScene: SKScene {
         
         addChild(bullet)
         
-        musicSoundEffects.soundEffects(fileName: "shot")
+        //musicSoundEffects.soundEffects(fileName: "shot")
         
         let moveUpAction = SKAction.moveBy(x: 0, y: self.frame.height, duration: 1.0)
         let removeBullet = SKAction.removeFromParent()
@@ -126,6 +127,7 @@ class GameScene: SKScene {
                                            selector: #selector(setBullet),
                                            userInfo: nil,
                                            repeats: true)
+        musicSoundEffects.soundEffects(fileName: "shot")
         
     }
     

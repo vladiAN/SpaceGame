@@ -25,7 +25,7 @@ class UserDefaultManager {
     }
     
     
-    var musicEffects: Bool {
+    var musicEffectsIsOn: Bool {
         get {
             defaults.bool(forKey: musicEffectsKey)
         }
@@ -34,13 +34,21 @@ class UserDefaultManager {
         }
     }
     
-    var backgroundMusic: Bool {
+    var backgroundMusicIsOn: Bool {
         get {
             defaults.bool(forKey: backgroundMusicKey)
         }
         set {
             defaults.set(newValue, forKey: backgroundMusicKey)
-            
+        }
+    }
+    
+    var vibrationIsOn: Bool {
+        get {
+            defaults.bool(forKey: vibrationKey)
+        }
+        set {
+            defaults.set(newValue, forKey: vibrationKey)
         }
     }
     

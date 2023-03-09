@@ -9,16 +9,46 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
+
+enum ImageName{
+    
+    case musicEffectsOn, musicEffectsOff, backgroundMusicOn, backgroundMusicOff, vibrationOn, vibrationOff
+    
+    var name: String {
+        switch self {
+        case .musicEffectsOn: return "speaker.wave.1.fill"
+        case .musicEffectsOff: return "speaker.fill"
+        case .backgroundMusicOn: return "music.note.list"
+        case .backgroundMusicOff: return "music.note"
+        case .vibrationOn: return "iphone.gen3.radiowaves.left.and.right"
+        case .vibrationOff: return "iphone.gen3"
+        }
+    }
+}
+
+
+
 class GameViewController: UIViewController {
     
+    var i = 0
+    
     let musicControl = MusicManager.shared
+    let defaults = UserDefaultManager.shared
+    let vibration = VibrationManager.shared
+    
+    var imageForMusicEffectsButton = UserDefaultManager.shared.musicEffectsIsOn ? "speaker.wave.1.fill" : "speaker.fill"
+    var imageBackgroundMusicButton = UserDefaultManager.shared.backgroundMusicIsOn ? "music.note.list" : "music.note"
+    var imageForvibrationButton = UserDefaultManager.shared.vibrationIsOn ? "iphone.gen3.radiowaves.left.and.right" : "iphone.gen3"
     
     let settingsButton = ButtonFactory.createButton(imageName: "gearshape")
     let changeBackgoundButton = ButtonFactory.createButton(imageName: "mountain.2.fill")
     let changeSkinShipButton = ButtonFactory.createButton(imageName: "car.top.radiowaves.front.fill")
-    var musicEffectsButton = ButtonFactory.createButton(imageName: "speaker.wave.1.fill") // TODO: speaker.fill - musicEffects off
-    let backgroundMusicButton = ButtonFactory.createButton(imageName: "music.note.list") // TODO: music.note - music off
-    let vibrationButton = ButtonFactory.createButton(imageName: "iphone.gen3.radiowaves.left.and.right") //TODO: iphone.gen3 - vibro off
+    lazy var musicEffectsButton = ButtonFactory.createButton(imageName: imageForMusicEffectsButton)
+    lazy var backgroundMusicButton = ButtonFactory.createButton(imageName: imageBackgroundMusicButton)
+    lazy var vibrationButton = ButtonFactory.createButton(imageName: imageForvibrationButton)
+    
+    
+    
     
     var effectsControlButtonsArray: [UIButton]?
     
@@ -50,7 +80,6 @@ class GameViewController: UIViewController {
         settingsTargetButton()
         setttingstackViewSkin()
         setupUI()
-
     }
 
     func setupUI() {
@@ -82,7 +111,7 @@ class GameViewController: UIViewController {
             backgroundMusicButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             
             vibrationButton.topAnchor.constraint(equalTo: backgroundMusicButton.bottomAnchor, constant: 10),
-            vibrationButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            vibrationButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
 
         ])
     }
@@ -99,7 +128,15 @@ class GameViewController: UIViewController {
         stackViewSkin.addArrangedSubview(changeSkinShipButton)
     }
     
+    func changeImageOnButton(button: UIButton, isOn: Bool, imageNameButtonON: ImageName, imageNameButtonOff: ImageName) {
+        let imageName = isOn ? imageNameButtonON.name : imageNameButtonOff.name
+        let configImage = UIImage.SymbolConfiguration(pointSize: 23, weight: .regular, scale: .large)
+        button.setImage(UIImage(systemName: imageName, withConfiguration: configImage), for: .normal)
+        button.imageView?.tintColor = #colorLiteral(red: 0, green: 0.9802040458, blue: 1, alpha: 1)
+    }
+    
     @objc func settingsButtonTapped() {
+        vibration.tapOnButton()
         musicControl.soundEffects(fileName: "click")
         print("settingsButtonTapped")
         effectsControlButtonsArray?.forEach { (btn) in
@@ -111,30 +148,56 @@ class GameViewController: UIViewController {
     }
     
     @objc func changeBackgoundButtonTapped() {
+        vibration.tapOnButton()
         musicControl.soundEffects(fileName: "click")
+        let vc = BackGroundImageVC()
+        vc.modalPresentationStyle = .overFullScreen
+        present(vc, animated: true)
         print("changeBackgoundButtonTapped")
     }
     
     @objc func changeSkinShipButtonTapped() {
+        vibration.tapOnButton()
         musicControl.soundEffects(fileName: "click")
+        let vc = SkinShipVC()
+        vc.modalPresentationStyle = .overFullScreen
+        present(vc, animated: true)
         print("changeSkinShipButtonTapped")
     }
     
     @objc func musicEffectsButtonTapped() {
-        UserDefaultManager.shared.musicEffects.toggle()
+        vibration.tapOnButton()
+        defaults.musicEffectsIsOn.toggle()
+        changeImageOnButton(button: musicEffectsButton,
+                            isOn: defaults.musicEffectsIsOn,
+                            imageNameButtonON: ImageName.musicEffectsOn,
+                            imageNameButtonOff: ImageName.musicEffectsOff
+        )
         musicControl.soundEffects(fileName: "click")
         print("musicEffectsButtonTapped")
     }
     
     @objc func backgroundMusicButtonTapped() {
-        UserDefaultManager.shared.backgroundMusic.toggle()
+        vibration.tapOnButton()
+        defaults.backgroundMusicIsOn.toggle()
+        changeImageOnButton(button: backgroundMusicButton,
+                            isOn: defaults.backgroundMusicIsOn,
+                            imageNameButtonON: ImageName.backgroundMusicOn,
+                            imageNameButtonOff: ImageName.backgroundMusicOff
+        )
         musicControl.soundEffects(fileName: "click")
         musicControl.playBackgroundMusic()
         print("backgroundMusicButtonTapped")
     }
     
     @objc func vibrationButtonTapped() {
-        MusicManager.shared.soundEffects(fileName: "click")
+        defaults.vibrationIsOn.toggle()
+        changeImageOnButton(button: vibrationButton,
+                            isOn: defaults.vibrationIsOn,
+                            imageNameButtonON: ImageName.vibrationOn,
+                            imageNameButtonOff: ImageName.vibrationOff)
+        vibration.tapOnButton()
+        musicControl.soundEffects(fileName: "click")
         print("vibrationButtonTapped")
     }
 }

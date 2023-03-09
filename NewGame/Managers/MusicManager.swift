@@ -13,14 +13,15 @@ class MusicManager {
     
     static let shared = MusicManager()
     
+    let defaults = UserDefaultManager.shared
+    
     var audioPlayer: AVAudioPlayer?
     var soundEffectsDict: [String: AVAudioPlayer] = [:]
     
     
     
     func playBackgroundMusic() {
-        let backgroundMusicIsActive = UserDefaultManager.shared.backgroundMusic
-        if backgroundMusicIsActive {
+        if defaults.backgroundMusicIsOn {
             if let bundle = Bundle.main.path(forResource: "background-music", ofType: "mp3") {
                 let backgroundMusic = NSURL(fileURLWithPath: bundle)
                 do {
@@ -36,10 +37,6 @@ class MusicManager {
             audioPlayer?.stop()
             audioPlayer = nil
         }
-    }
-    
-    func stopbackgroundMusic() {
-        
     }
     
     func loadSoundEffects() {
@@ -66,9 +63,7 @@ class MusicManager {
     }
     
     func soundEffects(fileName: String) {
-        let musicEffectIsActive = UserDefaultManager.shared.musicEffects
-        print(musicEffectIsActive)
-        if musicEffectIsActive {
+        if defaults.musicEffectsIsOn {
             if let sound = soundEffectsDict[fileName] {
                 sound.currentTime = 0
                 sound.play()
@@ -76,4 +71,7 @@ class MusicManager {
         } else { return }
     }
     
+    
+    
+    //TODO: repeat shot 
 }

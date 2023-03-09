@@ -12,6 +12,9 @@ class Planet: SKSpriteNode {
     
     let originalSizePlanet: CGFloat = 100
     
+    let vibration = VibrationManager.shared
+
+    
     init(size: CGSize) {
         let randomInt = Int.random(in: 1...11)
         let texture = SKTexture(imageNamed: "planet\(randomInt)")
@@ -23,7 +26,7 @@ class Planet: SKSpriteNode {
         self.physicsBody?.linearDamping = 0
         self.physicsBody?.categoryBitMask = BitMasks.planet
         self.physicsBody?.contactTestBitMask = BitMasks.borderBody | BitMasks.bullet | BitMasks.platform
-        self.physicsBody?.collisionBitMask = BitMasks.starShip
+        self.physicsBody?.collisionBitMask = BitMasks.platform
         
         labelNumber.fontName = "HelveticaNeue-Bold"
         labelNumber.fontSize = 40
@@ -66,8 +69,10 @@ class Planet: SKSpriteNode {
             parent?.addChild(childPlanetLeft)
             parent?.addChild(childPlanetRight)
             removeFromParent()
+            vibration.destroyedPlanet()
         } else {
             removeFromParent()
+            vibration.destroyedPlanet()
         }
         
     }
@@ -85,7 +90,7 @@ class Planet: SKSpriteNode {
             childPlanet.physicsBody?.applyImpulse(impulseVector)
             childPlanet.physicsBody?.categoryBitMask = BitMasks.planet
             childPlanet.physicsBody?.contactTestBitMask = BitMasks.borderBody | BitMasks.platform | BitMasks.bullet
-            childPlanet.physicsBody?.collisionBitMask = BitMasks.borderBody
+            childPlanet.physicsBody?.collisionBitMask = BitMasks.borderBody | BitMasks.platform
         }
         childPlanet.run(setPhysicsBody)
     }
@@ -136,7 +141,7 @@ class PlanetFactory: SKSpriteNode {
         let setPhysicsBody = SKAction.run {
             randomPlanet.physicsBody?.applyImpulse(impulseVector)
             randomPlanet.physicsBody?.affectedByGravity = true
-            randomPlanet.physicsBody?.collisionBitMask = BitMasks.borderBody
+            randomPlanet.physicsBody?.collisionBitMask = BitMasks.borderBody | BitMasks.platform
         }
         
         let rotateAction = randomBool ?
