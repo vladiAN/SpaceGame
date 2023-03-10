@@ -32,6 +32,7 @@ class GameScene: SKScene {
         
         physicsWorld.contactDelegate = self
 
+        view.backgroundColor = .red
         
         setScene()
     }
@@ -71,7 +72,8 @@ class GameScene: SKScene {
     }
     
     func setBackground() {
-        let background = SKSpriteNode(imageNamed: "background1")
+        let background = SKSpriteNode(imageNamed: UserDefaultManager.shared.defaults.string(forKey: "imageBackground")!)
+        print(UserDefaultManager.shared.defaults.string(forKey: "imageBackground")!)
         background.size = CGSize(width: self.size.width, height: self.size.height - platformImage.frame.size.height)
         background.position.y = platformImage.frame.maxY
         background.zPosition = -100

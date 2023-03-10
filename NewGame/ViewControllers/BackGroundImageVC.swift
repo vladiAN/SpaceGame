@@ -14,10 +14,12 @@ class BackGroundImageVC: UIViewController {
     var arrayImageForBackground: [UIImage] {
         get {
             return [
-                UIImage(named: "background")!,
                 UIImage(named: "background1")!,
                 UIImage(named: "background2")!,
-                UIImage(named: "background3")!
+                UIImage(named: "background3")!,
+                UIImage(named: "background4")!,
+                UIImage(named: "background5")!,
+                UIImage(named: "background6")!
             ]
         }
     }
@@ -59,7 +61,7 @@ class BackGroundImageVC: UIViewController {
     }
     
     func setupStackImage() {
-        let rows = 2
+        let rows = 3
         let cols = 2
         
         bigStackImage.spacing = 8
@@ -97,45 +99,42 @@ class BackGroundImageVC: UIViewController {
         
         bigStackImage.translatesAutoresizingMaskIntoConstraints = false
         
-        bigStackImage.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        bigStackImage.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        bigStackImage.widthAnchor.constraint(equalToConstant: 300).isActive = true
-        bigStackImage.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.8).isActive = true
+        NSLayoutConstraint.activate([
+            bigStackImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            bigStackImage.topAnchor.constraint(equalTo: closeButton.bottomAnchor),
+            bigStackImage.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.7),
+            bigStackImage.heightAnchor.constraint(equalTo: view.heightAnchor)
+        ])
         
         bigStackImage.addArrangedSubview(viewUnderButton)
-        
-       
-    }
-    
-    @objc func buttonActionSelect(sender: UIButton!) {
-        for i in arrayButtonImage {
-            if i.layer.borderWidth == 5 {
-                let indexImage = arrayButtonImage.firstIndex(of: i)
-                let imageFromArray = arrayImageForBackground[indexImage!]
-                imageView.image = imageFromArray
-                
-                switch indexImage {
-                case 0: UserDefaults.standard.set("1", forKey: "imageBackground")
-                case 1: UserDefaults.standard.set("2", forKey: "imageBackground")
-                case 2: UserDefaults.standard.set("3", forKey: "imageBackground")
-                case 3: UserDefaults.standard.set("4", forKey: "imageBackground")
-                default: print("error background")
-                }
-            }
-        }
+
     }
     
     func redBorderBTouch() {
         for i in 0...arrayButtonImage.count - 1 {
-            arrayButtonImage[i].addTarget(self, action: #selector(redBorder), for: .touchUpInside)
+            arrayButtonImage[i].addTarget(self, action: #selector(selectImage), for: .touchUpInside)
+            
             }
     }
     
-    @objc func redBorder(_ sender: UIButton) {
+    @objc func selectImage(_ sender: UIButton) {
         sender.layer.borderWidth = 5
         sender.layer.borderColor = UIColor.red.cgColor
+        
         for i in arrayButtonImage {
-            if i != sender {
+            if i == sender {
+                let indexImage = arrayButtonImage.firstIndex(of: i)
+                
+                switch indexImage {
+                case 0: UserDefaultManager.shared.defaults.set("background1", forKey: "imageBackground")
+                case 1: UserDefaultManager.shared.defaults.set("background2", forKey: "imageBackground")
+                case 2: UserDefaultManager.shared.defaults.set("background3", forKey: "imageBackground")
+                case 3: UserDefaultManager.shared.defaults.set("background4", forKey: "imageBackground")
+                case 4: UserDefaultManager.shared.defaults.set("background5", forKey: "imageBackground")
+                case 5: UserDefaultManager.shared.defaults.set("background6", forKey: "imageBackground")
+                default: print("error background")
+                }
+            } else {
                 i.layer.borderWidth = 0
             }
         }

@@ -15,12 +15,15 @@ class UserDefaultManager {
     private let musicEffectsKey = "musicEffects"
     private let backgroundMusicKey = "backgroundMusic"
     private let vibrationKey = "vibration"
+    private let backgroundImageKey = "imageBackground"
     
     private init() {
-        UserDefaults.standard.register(defaults: [
+        defaults.register(defaults: [
             musicEffectsKey : true,
             backgroundMusicKey : true,
-            vibrationKey : true
+            vibrationKey : true,
+            backgroundImageKey : "background1"
+            
         ])
     }
     
