@@ -12,7 +12,8 @@ class StarShip {
     static func setStarship(at point: CGPoint) -> SKSpriteNode {
         let starShipWidth: CGFloat = 60
         let starShipHeight: CGFloat = 70
-        let starShipTexture = SKTexture(imageNamed: "ship")
+        let starShipImage = UIImage(named: "ship1")
+        let starShipTexture = SKTexture(image: starShipImage!)
         let starShip = SKSpriteNode(texture: starShipTexture)
         let starshipSize = CGSize(width: starShipWidth, height: starShipHeight)
         starShip.size = CGSize(width: starshipSize.width, height: starshipSize.height)

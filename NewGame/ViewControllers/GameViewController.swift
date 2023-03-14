@@ -30,8 +30,6 @@ enum ImageName{
 
 class GameViewController: UIViewController {
     
-    var i = 0
-    
     let musicControl = MusicManager.shared
     let defaults = UserDefaultManager.shared
     let vibration = VibrationManager.shared
@@ -151,8 +149,18 @@ class GameViewController: UIViewController {
     @objc func changeBackgoundButtonTapped() {
         vibration.tapOnButton()
         musicControl.soundEffects(fileName: "click")
-        let vc = BackGroundImageVC()
+        let vc = ImagePickerVC()
         vc.modalPresentationStyle = .overFullScreen
+        vc.arrayImageForPicker = [
+            UIImage(named: "background1")!,
+            UIImage(named: "background2")!,
+            UIImage(named: "background3")!,
+            UIImage(named: "background4")!,
+            UIImage(named: "background5")!,
+            UIImage(named: "background6")!
+        ]
+        vc.multiplierForWidthAnchor = 0.8
+        vc.multiplierForHeightAnchor = 0.6
         present(vc, animated: true)
         print("changeBackgoundButtonTapped")
     }
@@ -160,8 +168,21 @@ class GameViewController: UIViewController {
     @objc func changeSkinShipButtonTapped() {
         vibration.tapOnButton()
         musicControl.soundEffects(fileName: "click")
-        let vc = SkinShipVC()
+        let vc = ImagePickerVC()
         vc.modalPresentationStyle = .overFullScreen
+        vc.arrayImageForPicker = [
+            UIImage(named: "ship1")!,
+            UIImage(named: "ship2")!,
+            UIImage(named: "ship3")!,
+            UIImage(named: "ship4")!,
+            UIImage(named: "ship5")!,
+            UIImage(named: "ship6")!
+        ]
+        vc.multiplierForWidthAnchor = 0.5
+        vc.multiplierForHeightAnchor = 0.3
+        vc.callBack = { str in
+            
+        }
         present(vc, animated: true)
         print("changeSkinShipButtonTapped")
     }

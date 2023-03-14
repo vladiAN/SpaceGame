@@ -7,22 +7,19 @@
 
 import UIKit
 
-class BackGroundImageVC: UIViewController {
+class ImagePickerVC: UIViewController {
+
     
     let closeButton = ButtonFactory.createButton(imageName: "xmark.circle")
     
-    var arrayImageForBackground: [UIImage] {
-        get {
-            return [
-                UIImage(named: "background1")!,
-                UIImage(named: "background2")!,
-                UIImage(named: "background3")!,
-                UIImage(named: "background4")!,
-                UIImage(named: "background5")!,
-                UIImage(named: "background6")!
-            ]
-        }
-    }
+    var arrayImageForPicker: [UIImage] = []
+    let backgroundImage: UIImage? = nil
+    let shipSkinImage: UIImage? = nil
+    var multiplierForWidthAnchor = 0.5
+    var multiplierForHeightAnchor = 0.3
+    
+    
+    var callBack: ((String) -> ())?
     
     let viewUnderButton: UIView = {
             let viewUnderButton = UIView()
@@ -61,14 +58,14 @@ class BackGroundImageVC: UIViewController {
     }
     
     func setupStackImage() {
-        let rows = 3
-        let cols = 2
+        let rows = 2
+        let cols = 3
         
         bigStackImage.spacing = 8
         bigStackImage.axis = .vertical
         bigStackImage.distribution = .fillEqually
         
-        var indexArrayImageForBackground = 0
+        var indexArrayImage = 0
         
         for _ in 0..<rows {
             
@@ -79,17 +76,13 @@ class BackGroundImageVC: UIViewController {
 
             for _ in 0..<cols {
                 
-                let imageBackground = UIButton()
-                imageBackground.layer.cornerRadius = 5
-                imageBackground.layer.masksToBounds = true
-                imageBackground.layer.shadowColor = imageBackground.backgroundColor?.cgColor
-                imageBackground.layer.shadowOffset = CGSize(width: 2, height: 5)
-                imageBackground.layer.shadowOpacity = 0.5
-                imageBackground.layer.shadowRadius = 2
-                imageBackground.setBackgroundImage(arrayImageForBackground[indexArrayImageForBackground], for: .normal)
-                indexArrayImageForBackground += 1
-                smallStack.addArrangedSubview(imageBackground)
-                arrayButtonImage.append(imageBackground)
+                let imageButton = UIButton()
+                imageButton.layer.cornerRadius = 5
+                imageButton.layer.masksToBounds = true
+                imageButton.setBackgroundImage(arrayImageForPicker[indexArrayImage], for: .normal)
+                indexArrayImage += 1
+                smallStack.addArrangedSubview(imageButton)
+                arrayButtonImage.append(imageButton)
             }
             
             bigStackImage.addArrangedSubview(smallStack)
@@ -102,8 +95,8 @@ class BackGroundImageVC: UIViewController {
         NSLayoutConstraint.activate([
             bigStackImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             bigStackImage.topAnchor.constraint(equalTo: closeButton.bottomAnchor),
-            bigStackImage.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.7),
-            bigStackImage.heightAnchor.constraint(equalTo: view.heightAnchor)
+            bigStackImage.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: multiplierForWidthAnchor),
+            bigStackImage.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: multiplierForHeightAnchor)
         ])
         
         bigStackImage.addArrangedSubview(viewUnderButton)
@@ -122,21 +115,16 @@ class BackGroundImageVC: UIViewController {
         sender.layer.borderColor = UIColor.red.cgColor
         
         for i in arrayButtonImage {
-            if i == sender {
-                let indexImage = arrayButtonImage.firstIndex(of: i)
-                
-                switch indexImage {
-                case 0: UserDefaultManager.shared.defaults.set("background1", forKey: "imageBackground")
-                case 1: UserDefaultManager.shared.defaults.set("background2", forKey: "imageBackground")
-                case 2: UserDefaultManager.shared.defaults.set("background3", forKey: "imageBackground")
-                case 3: UserDefaultManager.shared.defaults.set("background4", forKey: "imageBackground")
-                case 4: UserDefaultManager.shared.defaults.set("background5", forKey: "imageBackground")
-                case 5: UserDefaultManager.shared.defaults.set("background6", forKey: "imageBackground")
-                default: print("error background")
-                }
-            } else {
+            if i != sender {
                 i.layer.borderWidth = 0
+            } else {
+                let indexImage = arrayButtonImage.firstIndex(of: i)
+//                let imageFromArray = arrayImageForPicker[indexImage!]
+            let int = indexImage ?? 0
+                self.callBack?(String(int))
             }
         }
     }
+    
+    
 }

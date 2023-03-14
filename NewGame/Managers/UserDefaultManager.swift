@@ -16,13 +16,15 @@ class UserDefaultManager {
     private let backgroundMusicKey = "backgroundMusic"
     private let vibrationKey = "vibration"
     private let backgroundImageKey = "imageBackground"
+    private let skinShipImageKey = "skinShip"
     
     private init() {
         defaults.register(defaults: [
             musicEffectsKey : true,
             backgroundMusicKey : true,
             vibrationKey : true,
-            backgroundImageKey : "background1"
+            backgroundImageKey : "background1",
+            skinShipImageKey : "ship1"
             
         ])
     }

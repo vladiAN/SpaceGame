@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C00437AB29B8906C00C35413 /* VibrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00437AA29B8906C00C35413 /* VibrationManager.swift */; };
-		C00437AD29B8B7A900C35413 /* BackGroundImageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00437AC29B8B7A900C35413 /* BackGroundImageVC.swift */; };
+		C00437AD29B8B7A900C35413 /* ImagePickerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00437AC29B8B7A900C35413 /* ImagePickerVC.swift */; };
 		C0568CF629A4C88A00BB9181 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0568CF529A4C88A00BB9181 /* AppDelegate.swift */; };
 		C0568CF829A4C88A00BB9181 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C0568CF729A4C88A00BB9181 /* GameScene.sks */; };
 		C0568CFC29A4C88A00BB9181 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0568CFB29A4C88A00BB9181 /* GameScene.swift */; };
@@ -19,7 +19,6 @@
 		C0C7E79E29B600E5000A120A /* ButtonFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C7E79D29B600E5000A120A /* ButtonFactory.swift */; };
 		C0C7E7A029B62ECE000A120A /* UserDefaultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C7E79F29B62ECE000A120A /* UserDefaultManager.swift */; };
 		C0C7E7A229B639CC000A120A /* click.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C0C7E7A129B639CB000A120A /* click.mp3 */; };
-		C0CFF97A29B8D027002DD5CF /* SkinShipVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CFF97929B8D027002DD5CF /* SkinShipVC.swift */; };
 		C0E50A8329A6234D00DA8F45 /* StarShip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E50A8229A6234D00DA8F45 /* StarShip.swift */; };
 		C0E50A8729A6620C00DA8F45 /* PlanetFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E50A8629A6620C00DA8F45 /* PlanetFactory.swift */; };
 		C0EABF1529B0E38900AF4FC1 /* MusicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EABF1429B0E38900AF4FC1 /* MusicManager.swift */; };
@@ -31,7 +30,7 @@
 
 /* Begin PBXFileReference section */
 		C00437AA29B8906C00C35413 /* VibrationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VibrationManager.swift; sourceTree = "<group>"; };
-		C00437AC29B8B7A900C35413 /* BackGroundImageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackGroundImageVC.swift; sourceTree = "<group>"; };
+		C00437AC29B8B7A900C35413 /* ImagePickerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerVC.swift; sourceTree = "<group>"; };
 		C0568CF229A4C88A00BB9181 /* NewGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0568CF529A4C88A00BB9181 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C0568CF729A4C88A00BB9181 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -43,7 +42,6 @@
 		C0C7E79D29B600E5000A120A /* ButtonFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonFactory.swift; sourceTree = "<group>"; };
 		C0C7E79F29B62ECE000A120A /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
 		C0C7E7A129B639CB000A120A /* click.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = click.mp3; sourceTree = "<group>"; };
-		C0CFF97929B8D027002DD5CF /* SkinShipVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinShipVC.swift; sourceTree = "<group>"; };
 		C0E50A8229A6234D00DA8F45 /* StarShip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarShip.swift; sourceTree = "<group>"; };
 		C0E50A8629A6620C00DA8F45 /* PlanetFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetFactory.swift; sourceTree = "<group>"; };
 		C0EABF1429B0E38900AF4FC1 /* MusicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicManager.swift; sourceTree = "<group>"; };
@@ -129,8 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				C0568CFD29A4C88A00BB9181 /* GameViewController.swift */,
-				C00437AC29B8B7A900C35413 /* BackGroundImageVC.swift */,
-				C0CFF97929B8D027002DD5CF /* SkinShipVC.swift */,
+				C00437AC29B8B7A900C35413 /* ImagePickerVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -224,7 +221,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C0CFF97A29B8D027002DD5CF /* SkinShipVC.swift in Sources */,
 				C0568CFC29A4C88A00BB9181 /* GameScene.swift in Sources */,
 				C0C7E79E29B600E5000A120A /* ButtonFactory.swift in Sources */,
 				C0C7E7A029B62ECE000A120A /* UserDefaultManager.swift in Sources */,
@@ -233,7 +229,7 @@
 				C0568CF629A4C88A00BB9181 /* AppDelegate.swift in Sources */,
 				C0E50A8329A6234D00DA8F45 /* StarShip.swift in Sources */,
 				C0E50A8729A6620C00DA8F45 /* PlanetFactory.swift in Sources */,
-				C00437AD29B8B7A900C35413 /* BackGroundImageVC.swift in Sources */,
+				C00437AD29B8B7A900C35413 /* ImagePickerVC.swift in Sources */,
 				C0EABF1529B0E38900AF4FC1 /* MusicManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
