@@ -8,12 +8,15 @@
 import Foundation
 import SpriteKit
 
-class Planet: SKSpriteNode {
-    
-    let originalSizePlanet: CGFloat = 100
-    
-    let vibration = VibrationManager.shared
+enum SizePlanet: CGFloat {
+    case sizeBig = 100
+    case sizeNormal = 80
+    case sizeSmall = 64
+}
 
+class Planet: SKSpriteNode {
+
+    let vibration = VibrationManager.shared
     
     init(size: CGSize) {
         let randomInt = Int.random(in: 1...11)
@@ -52,12 +55,12 @@ class Planet: SKSpriteNode {
     }
     
     func replaceWithTwoSmaller() {
-        
+      
         let planetDecayFactor: CGFloat = 0.8
         
         let sizeCildPlanet = CGSize(width: self.size.width * planetDecayFactor, height: self.size.width * planetDecayFactor)
         
-        if sizeCildPlanet.width >= originalSizePlanet * planetDecayFactor * planetDecayFactor {
+        if sizeCildPlanet.width >= SizePlanet.sizeSmall.rawValue {
             let childPlanetLeft = Planet(size: sizeCildPlanet)
             let childPlanetRight = Planet(size: sizeCildPlanet)
             
@@ -65,12 +68,12 @@ class Planet: SKSpriteNode {
             setChildPlanet(childPlanet: childPlanetRight, childPlanetLeft: false)
             
             MusicManager.shared.soundEffects(fileName: "ballSeparation")
-            
             parent?.addChild(childPlanetLeft)
             parent?.addChild(childPlanetRight)
             removeFromParent()
             vibration.destroyedPlanet()
         } else {
+            MusicManager.shared.soundEffects(fileName: "ballSeparation")
             removeFromParent()
             vibration.destroyedPlanet()
         }
@@ -100,11 +103,11 @@ class Planet: SKSpriteNode {
         let forceOfPush: Int
         
         switch self.size.width {
-        case 100...:
+        case SizePlanet.sizeBig.rawValue:
             forceOfPush = 30
-        case 80..<100:
+        case SizePlanet.sizeNormal.rawValue:
             forceOfPush = 20
-        case ..<80:
+        case SizePlanet.sizeSmall.rawValue:
             forceOfPush = 10
         default:
             return
@@ -122,8 +125,12 @@ class Planet: SKSpriteNode {
 class PlanetFactory: SKSpriteNode {
     
     static func createNewPlanet(frame: CGRect) -> Planet {
+        
+        let randomSizeArr = [SizePlanet.sizeBig, SizePlanet.sizeNormal, SizePlanet.sizeSmall]
+        
+        let randomSizePlanet = randomSizeArr.randomElement()!
 
-        let randomPlanet = Planet(size: CGSize(width: 100, height: 100))
+        let randomPlanet = Planet(size: CGSize(width: randomSizePlanet.rawValue, height: randomSizePlanet.rawValue))
         
         let randomBool = Bool.random()
         let moveDuration = 2.0

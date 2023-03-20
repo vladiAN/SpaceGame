@@ -19,7 +19,6 @@ struct BitMasks {
 class GameScene: SKScene {
 
     var starShip: SKSpriteNode!
-    var planet: Planet!
     var bullet: SKSpriteNode!
     var bulletTimerShot: Timer?
     var delayToShot = 0.1
@@ -29,23 +28,26 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         scene?.size = view.frame.size
-        
+                
         physicsWorld.contactDelegate = self
-
-        view.backgroundColor = .red
         
         setScene()
     }
     
     func setScene() {
         setBorderBody()
-       setBackground()
-        
-        starShip = StarShip.setStarship(at: CGPoint(x: frame.midX, y: frame.minY + 100))
-        addChild(starShip)
-        
+        createStarShip(imageName: nil)
         createPlanet()
         setPlatform()
+    }
+    
+    func createStarShip(imageName: String?) {
+        if let imageName {
+            starShip = StarShip.setStarship(at: CGPoint(x: frame.midX, y: frame.minY + 100), imageName: imageName)
+        } else {
+            starShip = StarShip.setStarship(at: CGPoint(x: frame.midX, y: frame.minY + 100), imageName: UserDefaults.standard.string(forKey: "skinShip")!)
+        }
+        addChild(starShip)
     }
     
     func setBorderBody() {
@@ -56,7 +58,6 @@ class GameScene: SKScene {
     }
     
     func setPlatform() {
-        
         platformImage.position = CGPoint(x: frame.midX, y: frame.minY + (platformImage.size.height / 2))
         platformImage.zPosition = -1
         
@@ -70,18 +71,7 @@ class GameScene: SKScene {
         addChild(platform)
         addChild(platformImage)
     }
-    
-    func setBackground() {
-        let imageForBackground = UIImage(named: "background6")
-        let textureForBackground = SKTexture(image: imageForBackground!)
-        let background = SKSpriteNode(texture: textureForBackground)
-        let scaleY = (scene?.size.height)! / background.size.height
-        background.size = CGSize(width: background.size.width * scaleY, height: background.size.height * scaleY)
-        background.position.y = platformImage.frame.maxY
-        background.zPosition = -100
-        addChild(background)
-    }
-    
+
     @objc func setBullet() {
         bullet = SKSpriteNode(imageNamed: "bullet")
         bullet.size = CGSize(width: 20, height: 20)
@@ -99,8 +89,6 @@ class GameScene: SKScene {
         
         addChild(bullet)
         
-        //musicSoundEffects.soundEffects(fileName: "shot")
-        
         let moveUpAction = SKAction.moveBy(x: 0, y: self.frame.height, duration: 1.0)
         let removeBullet = SKAction.removeFromParent()
         let sequense = SKAction.sequence([moveUpAction, removeBullet])
@@ -108,72 +96,97 @@ class GameScene: SKScene {
     }
     
     func createPlanet() {
-        planet = PlanetFactory.createNewPlanet(frame: frame)
+        let planet = PlanetFactory.createNewPlanet(frame: frame)
         addChild(planet)
         
     }
     
+    func createExplosion(position: CGPoint) {
+        let explosion = SKEmitterNode(fileNamed: "Explosion.sks")!
+        let removeExplosion = SKAction.sequence([
+            .wait(forDuration: 2),
+            .removeFromParent()
+        ])
+        explosion.position = position
+        explosion.zPosition = 15
+        explosion.run(removeExplosion)
+        addChild(explosion)
+    }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let touchLocation = touch.location(in: self)
-            
             starShip.position.x = touchLocation.x
         }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         setBullet()
-        bulletTimerShot = Timer.scheduledTimer(timeInterval: TimeInterval(delayToShot),
-                                           target: self,
-                                           selector: #selector(setBullet),
-                                           userInfo: nil,
-                                           repeats: true)
-        musicSoundEffects.soundEffects(fileName: "shot")
-        
+        let action = SKAction.repeatForever(.sequence([
+            .wait(forDuration: delayToShot),
+            .run {
+                self.setBullet()
+            }
+        ]))
+        self.run(action, withKey: "bullet")
+        musicSoundEffects.shotEffects()
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        bulletTimerShot?.invalidate()
-        bulletTimerShot = nil
+        self.removeAction(forKey: "bullet")
+        musicSoundEffects.shotEffectsStop()
     }
     
 }
 
 extension GameScene: SKPhysicsContactDelegate {
+    
     func didBegin(_ contact: SKPhysicsContact) {
         
-        guard let bodyNotPlanet = [contact.bodyA, contact.bodyB].first(where: { $0.categoryBitMask != BitMasks.planet}) else { return }
-        
-        if bodyNotPlanet.categoryBitMask == BitMasks.bullet {
-            bodyNotPlanet.node?.removeFromParent()
+        if let contactPlanetWithBullet = contact.hasContact(contact: contact, categoryA: BitMasks.planet, categoryB: BitMasks.bullet) {
+            contactPlanetWithBullet.bodyB.node?.removeFromParent()
+            guard let planet = contactPlanetWithBullet.bodyA.node as? Planet else { return }
             planet.lives -= 1
             if planet.lives < 1 {
+                createExplosion(position: planet.position)
                 planet.replaceWithTwoSmaller()
-                if self.children.filter({ $0 is Planet}).count == 2 {
-                   createPlanet()
+                let planetInSceneArray = self.children.filter({ $0 is Planet})
+                print(planetInSceneArray.count)
+                switch planetInSceneArray.count {
+                case 0...1:
+                    createPlanet()
+                case 2..<3:
+                    if planetInSceneArray[0].frame.width < 80 && planetInSceneArray[1].frame.width < 80 {
+                        createPlanet()
+                    }
+                default: return
+
+                }
+            }
+        }
+
+        if let contactPlanetWithBorder = contact.hasContact(contact: contact, categoryA: BitMasks.planet, categoryB: BitMasks.borderBody) {
+            if let planet = contactPlanetWithBorder.bodyA.node as? Planet {
+                planet.impulsFromBorder(planetOnTheLeft: planet.position.x < frame.midX)
+            }
+        }
+
+        if let contactPlanetWithPlatform =  contact.hasContact(contact: contact, categoryA: BitMasks.planet, categoryB: BitMasks.platform) {
+            musicSoundEffects.soundEffects(fileName: "ballDrop")
+            if let planet = contactPlanetWithPlatform.bodyA.node as? Planet {
+                switch planet.size.width {
+                case SizePlanet.sizeBig.rawValue:
+                    planet.physicsBody?.velocity.dy = 1300
+                case SizePlanet.sizeNormal.rawValue:
+                    planet.physicsBody?.velocity.dy = 1200
+                case SizePlanet.sizeSmall.rawValue:
+                    planet.physicsBody?.velocity.dy = 1000
+                default:
+                    return
                 }
             }
         }
         
-        guard let bodyPlanet = [contact.bodyA, contact.bodyB].first(where: { $0.categoryBitMask == BitMasks.planet}) else { return }
-        
-        if let contactPlanet = bodyPlanet.node as? Planet {
-            planet = contactPlanet
-        }
-        
-        if contact.bodyA.categoryBitMask == BitMasks.planet &&
-            contact.bodyB.categoryBitMask == BitMasks.borderBody ||
-            contact.bodyA.categoryBitMask == BitMasks.borderBody &&
-            contact.bodyB.categoryBitMask == BitMasks.planet {
-            planet.impulsFromBorder(planetOnTheLeft: planet.position.x < frame.midX)
-        }
-        
-        if contact.bodyA.categoryBitMask == BitMasks.planet &&
-            contact.bodyB.categoryBitMask == BitMasks.platform ||
-            contact.bodyA.categoryBitMask == BitMasks.platform &&
-            contact.bodyB.categoryBitMask == BitMasks.planet {
-            musicSoundEffects.soundEffects(fileName: "ballDrop")
-        }
     }
 }
+

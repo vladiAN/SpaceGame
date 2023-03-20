@@ -10,7 +10,6 @@
 		C00437AB29B8906C00C35413 /* VibrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00437AA29B8906C00C35413 /* VibrationManager.swift */; };
 		C00437AD29B8B7A900C35413 /* ImagePickerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00437AC29B8B7A900C35413 /* ImagePickerVC.swift */; };
 		C0568CF629A4C88A00BB9181 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0568CF529A4C88A00BB9181 /* AppDelegate.swift */; };
-		C0568CF829A4C88A00BB9181 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C0568CF729A4C88A00BB9181 /* GameScene.sks */; };
 		C0568CFC29A4C88A00BB9181 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0568CFB29A4C88A00BB9181 /* GameScene.swift */; };
 		C0568CFE29A4C88A00BB9181 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0568CFD29A4C88A00BB9181 /* GameViewController.swift */; };
 		C0568D0129A4C88A00BB9181 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C0568CFF29A4C88A00BB9181 /* Main.storyboard */; };
@@ -19,6 +18,9 @@
 		C0C7E79E29B600E5000A120A /* ButtonFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C7E79D29B600E5000A120A /* ButtonFactory.swift */; };
 		C0C7E7A029B62ECE000A120A /* UserDefaultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C7E79F29B62ECE000A120A /* UserDefaultManager.swift */; };
 		C0C7E7A229B639CC000A120A /* click.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C0C7E7A129B639CB000A120A /* click.mp3 */; };
+		C0D96E1829C86EFA007ED96D /* Explosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = C0D96E1629C86EFA007ED96D /* Explosion.sks */; };
+		C0D96E1929C86EFA007ED96D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0D96E1729C86EFA007ED96D /* Assets.xcassets */; };
+		C0D96E1B29C8B822007ED96D /* Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D96E1A29C8B822007ED96D /* Extention.swift */; };
 		C0E50A8329A6234D00DA8F45 /* StarShip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E50A8229A6234D00DA8F45 /* StarShip.swift */; };
 		C0E50A8729A6620C00DA8F45 /* PlanetFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E50A8629A6620C00DA8F45 /* PlanetFactory.swift */; };
 		C0EABF1529B0E38900AF4FC1 /* MusicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EABF1429B0E38900AF4FC1 /* MusicManager.swift */; };
@@ -33,7 +35,6 @@
 		C00437AC29B8B7A900C35413 /* ImagePickerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerVC.swift; sourceTree = "<group>"; };
 		C0568CF229A4C88A00BB9181 /* NewGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0568CF529A4C88A00BB9181 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C0568CF729A4C88A00BB9181 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		C0568CFB29A4C88A00BB9181 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		C0568CFD29A4C88A00BB9181 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		C0568D0029A4C88A00BB9181 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -42,6 +43,9 @@
 		C0C7E79D29B600E5000A120A /* ButtonFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonFactory.swift; sourceTree = "<group>"; };
 		C0C7E79F29B62ECE000A120A /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
 		C0C7E7A129B639CB000A120A /* click.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = click.mp3; sourceTree = "<group>"; };
+		C0D96E1629C86EFA007ED96D /* Explosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Explosion.sks; sourceTree = "<group>"; };
+		C0D96E1729C86EFA007ED96D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C0D96E1A29C8B822007ED96D /* Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extention.swift; sourceTree = "<group>"; };
 		C0E50A8229A6234D00DA8F45 /* StarShip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarShip.swift; sourceTree = "<group>"; };
 		C0E50A8629A6620C00DA8F45 /* PlanetFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetFactory.swift; sourceTree = "<group>"; };
 		C0EABF1429B0E38900AF4FC1 /* MusicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicManager.swift; sourceTree = "<group>"; };
@@ -83,8 +87,10 @@
 			isa = PBXGroup;
 			children = (
 				C0568CF529A4C88A00BB9181 /* AppDelegate.swift */,
-				C0568CF729A4C88A00BB9181 /* GameScene.sks */,
 				C0568CFB29A4C88A00BB9181 /* GameScene.swift */,
+				C0D96E1A29C8B822007ED96D /* Extention.swift */,
+				C0D96E1629C86EFA007ED96D /* Explosion.sks */,
+				C0D96E1729C86EFA007ED96D /* Assets.xcassets */,
 				C0CFF97B29B9D714002DD5CF /* ViewControllers */,
 				C0C7E7A429B72F7D000A120A /* Сlasses */,
 				C0C7E7A329B72F43000A120A /* Managers */,
@@ -205,9 +211,10 @@
 				C0EABF1729B10AC900AF4FC1 /* background-music.mp3 in Resources */,
 				C0C7E7A229B639CC000A120A /* click.mp3 in Resources */,
 				C0EAC39929B243C500E1FB3C /* shot.mp3 in Resources */,
+				C0D96E1829C86EFA007ED96D /* Explosion.sks in Resources */,
+				C0D96E1929C86EFA007ED96D /* Assets.xcassets in Resources */,
 				C0EAC39729B242C500E1FB3C /* ballDrop.mp3 in Resources */,
 				C0568D0129A4C88A00BB9181 /* Main.storyboard in Resources */,
-				C0568CF829A4C88A00BB9181 /* GameScene.sks in Resources */,
 				C0EABF1D29B21F2700AF4FC1 /* ballSeparation.mp3 in Resources */,
 				C0568D0329A4C88C00BB9181 /* Assets.xcassets in Resources */,
 				C0568D0629A4C88C00BB9181 /* LaunchScreen.storyboard in Resources */,
@@ -230,6 +237,7 @@
 				C0E50A8329A6234D00DA8F45 /* StarShip.swift in Sources */,
 				C0E50A8729A6620C00DA8F45 /* PlanetFactory.swift in Sources */,
 				C00437AD29B8B7A900C35413 /* ImagePickerVC.swift in Sources */,
+				C0D96E1B29C8B822007ED96D /* Extention.swift in Sources */,
 				C0EABF1529B0E38900AF4FC1 /* MusicManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

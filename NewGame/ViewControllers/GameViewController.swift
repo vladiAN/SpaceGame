@@ -27,12 +27,13 @@ enum ImageName{
 }
 
 
-
 class GameViewController: UIViewController {
     
     let musicControl = MusicManager.shared
     let defaults = UserDefaultManager.shared
     let vibration = VibrationManager.shared
+    
+    var backgroundImage = UIImageView()
     
     var imageForMusicEffectsButton = UserDefaultManager.shared.musicEffectsIsOn ? "speaker.wave.1.fill" : "speaker.fill"
     var imageBackgroundMusicButton = UserDefaultManager.shared.backgroundMusicIsOn ? "music.note.list" : "music.note"
@@ -45,28 +46,28 @@ class GameViewController: UIViewController {
     lazy var backgroundMusicButton = ButtonFactory.createButton(imageName: imageBackgroundMusicButton)
     lazy var vibrationButton = ButtonFactory.createButton(imageName: imageForvibrationButton)
     
-    
-    
-    
     var effectsControlButtonsArray: [UIButton]?
     
     let stackViewSkin = UIStackView()
-
+    
+    let scene = GameScene()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .red
+        let skView = SKView(frame: view.frame)
+        self.view.addSubview(skView)
         
-        if let view = self.view as! SKView? {
-            if let scene = SKScene(fileNamed: "GameScene") {
-                scene.scaleMode = .aspectFill
-                view.presentScene(scene)
-            }
-            view.ignoresSiblingOrder = true
-            view.showsFPS = true
-            view.showsNodeCount = true
-            view.showsPhysics = true
-        }
+        scene.scaleMode = .aspectFill
+        scene.backgroundColor = .clear
+        skView.presentScene(scene)
+        
+        skView.allowsTransparency = true
+        skView.ignoresSiblingOrder = true
+        skView.showsFPS = true
+        skView.showsNodeCount = true
+        skView.showsPhysics = true
+        
         
         musicControl.loadSoundEffects()
         musicControl.playBackgroundMusic()
@@ -78,15 +79,26 @@ class GameViewController: UIViewController {
         
         settingsTargetButton()
         setttingstackViewSkin()
+        setBackground()
         setupUI()
     }
-
+    
     func setupUI() {
         view.addSubview(stackViewSkin)
         view.addSubview(musicEffectsButton)
         view.addSubview(backgroundMusicButton)
         view.addSubview(vibrationButton)
         settingsConstraint()
+    }
+    
+    func setBackground() {
+        
+        if let backgroundImageName = UserDefaults.standard.string(forKey: "imageBackground") {
+            backgroundImage = UIImageView(image: UIImage(named: backgroundImageName))
+            let scaleY = view.frame.size.height / backgroundImage.frame.size.height
+            backgroundImage.frame.size = CGSize(width: backgroundImage.frame.size.width * scaleY, height: view.frame.height)
+            view.insertSubview(backgroundImage, at: 0)
+        }
     }
     
     func settingsTargetButton() {
@@ -97,7 +109,7 @@ class GameViewController: UIViewController {
         backgroundMusicButton.addTarget(self, action: #selector(backgroundMusicButtonTapped), for: .touchUpInside)
         vibrationButton.addTarget(self, action: #selector(vibrationButtonTapped), for: .touchUpInside)
     }
-
+    
     func settingsConstraint() {
         NSLayoutConstraint.activate([
             stackViewSkin.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -111,7 +123,7 @@ class GameViewController: UIViewController {
             
             vibrationButton.topAnchor.constraint(equalTo: backgroundMusicButton.bottomAnchor, constant: 10),
             vibrationButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-
+            
         ])
     }
     
@@ -151,18 +163,20 @@ class GameViewController: UIViewController {
         musicControl.soundEffects(fileName: "click")
         let vc = ImagePickerVC()
         vc.modalPresentationStyle = .overFullScreen
-        vc.arrayImageForPicker = [
-            UIImage(named: "background1")!,
-            UIImage(named: "background2")!,
-            UIImage(named: "background3")!,
-            UIImage(named: "background4")!,
-            UIImage(named: "background5")!,
-            UIImage(named: "background6")!
-        ]
+        vc.strs = ["background1", "background2", "background3", "background4", "background5", "background6"]
+        vc.callBack = { str in
+            self.setBgString(imageName: str)
+            self.backgroundImage.removeFromSuperview()
+            self.setBackground()
+        }
         vc.multiplierForWidthAnchor = 0.8
         vc.multiplierForHeightAnchor = 0.6
         present(vc, animated: true)
         print("changeBackgoundButtonTapped")
+    }
+    
+    func setBgString(imageName: String) {
+        UserDefaults.standard.set(imageName, forKey: "imageBackground")
     }
     
     @objc func changeSkinShipButtonTapped() {
@@ -170,21 +184,22 @@ class GameViewController: UIViewController {
         musicControl.soundEffects(fileName: "click")
         let vc = ImagePickerVC()
         vc.modalPresentationStyle = .overFullScreen
-        vc.arrayImageForPicker = [
-            UIImage(named: "ship1")!,
-            UIImage(named: "ship2")!,
-            UIImage(named: "ship3")!,
-            UIImage(named: "ship4")!,
-            UIImage(named: "ship5")!,
-            UIImage(named: "ship6")!
-        ]
+        vc.strs = ["ship1", "ship2", "ship3", "ship4", "ship5", "ship6"]
         vc.multiplierForWidthAnchor = 0.5
         vc.multiplierForHeightAnchor = 0.3
         vc.callBack = { str in
+            self.setShipSkin(imageName: str)
+            self.scene.starShip.removeFromParent()
+            self.scene.createStarShip(imageName: str)
             
         }
+        
         present(vc, animated: true)
         print("changeSkinShipButtonTapped")
+    }
+    
+    func setShipSkin(imageName: String) {
+        UserDefaults.standard.set(imageName, forKey: "skinShip")
     }
     
     @objc func musicEffectsButtonTapped() {
@@ -211,6 +226,8 @@ class GameViewController: UIViewController {
         musicControl.playBackgroundMusic()
         print("backgroundMusicButtonTapped")
     }
+    
+    
     
     @objc func vibrationButtonTapped() {
         defaults.vibrationIsOn.toggle()

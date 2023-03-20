@@ -12,7 +12,10 @@ class ImagePickerVC: UIViewController {
     
     let closeButton = ButtonFactory.createButton(imageName: "xmark.circle")
     
-    var arrayImageForPicker: [UIImage] = []
+    var strs: [String] = []
+    lazy var arrayImageForPicker: [UIImage] = {
+        strs.compactMap { UIImage(named: $0) }
+    }()
     let backgroundImage: UIImage? = nil
     let shipSkinImage: UIImage? = nil
     var multiplierForWidthAnchor = 0.5
@@ -80,6 +83,7 @@ class ImagePickerVC: UIViewController {
                 imageButton.layer.cornerRadius = 5
                 imageButton.layer.masksToBounds = true
                 imageButton.setBackgroundImage(arrayImageForPicker[indexArrayImage], for: .normal)
+                imageButton.tag = indexArrayImage
                 indexArrayImage += 1
                 smallStack.addArrangedSubview(imageButton)
                 arrayButtonImage.append(imageButton)
@@ -104,24 +108,22 @@ class ImagePickerVC: UIViewController {
     }
     
     func redBorderBTouch() {
-        for i in 0...arrayButtonImage.count - 1 {
-            arrayButtonImage[i].addTarget(self, action: #selector(selectImage), for: .touchUpInside)
-            
-            }
+        arrayButtonImage.forEach { UIButton in
+            UIButton.addTarget(self, action: #selector(selectImage), for: .touchUpInside)
+        }
     }
     
     @objc func selectImage(_ sender: UIButton) {
         sender.layer.borderWidth = 5
         sender.layer.borderColor = UIColor.red.cgColor
         
+        let index = sender.tag
+        let imageName = strs[index]
+        self.callBack?("\(imageName)")
+        
         for i in arrayButtonImage {
             if i != sender {
                 i.layer.borderWidth = 0
-            } else {
-                let indexImage = arrayButtonImage.firstIndex(of: i)
-//                let imageFromArray = arrayImageForPicker[indexImage!]
-            let int = indexImage ?? 0
-                self.callBack?(String(int))
             }
         }
     }

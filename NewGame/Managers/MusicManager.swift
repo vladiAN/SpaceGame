@@ -15,7 +15,8 @@ class MusicManager {
     
     let defaults = UserDefaultManager.shared
     
-    var audioPlayer: AVAudioPlayer?
+    var bgAudioPlayer: AVAudioPlayer?
+    var shotAudioPlayer: AVAudioPlayer?
     var soundEffectsDict: [String: AVAudioPlayer] = [:]
     
     
@@ -25,8 +26,8 @@ class MusicManager {
             if let bundle = Bundle.main.path(forResource: "background-music", ofType: "mp3") {
                 let backgroundMusic = NSURL(fileURLWithPath: bundle)
                 do {
-                    audioPlayer = try AVAudioPlayer(contentsOf: backgroundMusic as URL)
-                    guard let audioPlayer = audioPlayer else { return }
+                    bgAudioPlayer = try AVAudioPlayer(contentsOf: backgroundMusic as URL)
+                    guard let audioPlayer = bgAudioPlayer else { return }
                     audioPlayer.numberOfLoops = -1
                     audioPlayer.play()
                 } catch {
@@ -34,8 +35,8 @@ class MusicManager {
                 }
             }
         } else {
-            audioPlayer?.stop()
-            audioPlayer = nil
+            bgAudioPlayer?.stop()
+            bgAudioPlayer = nil
         }
     }
     
@@ -71,7 +72,26 @@ class MusicManager {
         } else { return }
     }
     
+    func shotEffects() {
+        if defaults.musicEffectsIsOn {
+            if let bundle = Bundle.main.path(forResource: "shot", ofType: "mp3") {
+                let shot = NSURL(fileURLWithPath: bundle)
+                do {
+                    shotAudioPlayer = try AVAudioPlayer(contentsOf: shot as URL)
+                    guard let audioPlayer = shotAudioPlayer else { return }
+                    audioPlayer.numberOfLoops = -1
+                    audioPlayer.play()
+                } catch {
+                    print("Cloud not load background music file")
+                }
+            }
+        } else { return }
+        
+    }
     
-    
-    //TODO: repeat shot 
+    func shotEffectsStop() {
+        shotAudioPlayer?.stop()
+        shotAudioPlayer = nil
+    }
+
 }
