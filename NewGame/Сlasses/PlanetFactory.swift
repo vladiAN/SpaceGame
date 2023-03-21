@@ -118,8 +118,6 @@ class Planet: SKSpriteNode {
         self.physicsBody?.applyImpulse(CGVector(dx: -forceOfPush, dy: 0))
     }
     
-    
-    
 }
 
 class PlanetFactory: SKSpriteNode {

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import SpriteKit
+//import SpriteKit
 import GameplayKit
 
 
@@ -49,6 +49,7 @@ class GameViewController: UIViewController {
     var effectsControlButtonsArray: [UIButton]?
     
     let stackViewSkin = UIStackView()
+    let scoreLabel = UILabel()
     
     let scene = GameScene()
     
@@ -58,16 +59,19 @@ class GameViewController: UIViewController {
         let skView = SKView(frame: view.frame)
         self.view.addSubview(skView)
         
+        scene.scoreCallBack = { [weak self] score in
+            self?.scoreLabel.text = "Score \(score)"
+        }
+        
         scene.scaleMode = .aspectFill
         scene.backgroundColor = .clear
         skView.presentScene(scene)
         
         skView.allowsTransparency = true
         skView.ignoresSiblingOrder = true
-        skView.showsFPS = true
-        skView.showsNodeCount = true
-        skView.showsPhysics = true
-        
+//        skView.showsFPS = true
+//        skView.showsNodeCount = true
+//        skView.showsPhysics = true
         
         musicControl.loadSoundEffects()
         musicControl.playBackgroundMusic()
@@ -80,6 +84,7 @@ class GameViewController: UIViewController {
         settingsTargetButton()
         setttingstackViewSkin()
         setBackground()
+        setupLabel()
         setupUI()
     }
     
@@ -124,7 +129,18 @@ class GameViewController: UIViewController {
             vibrationButton.topAnchor.constraint(equalTo: backgroundMusicButton.bottomAnchor, constant: 10),
             vibrationButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             
+            scoreLabel.centerYAnchor.constraint(equalTo: stackViewSkin.centerYAnchor),
+            scoreLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
         ])
+    }
+    
+    func setupLabel() {
+        scoreLabel.font = .init(name: "Menlo-Italic", size: 25)
+        scoreLabel.text = "Score: 0"
+        scoreLabel.textColor = settingsButton.imageView?.tintColor
+        scoreLabel.translatesAutoresizingMaskIntoConstraints = false
+       
+        view.addSubview(scoreLabel)
     }
     
     func setttingstackViewSkin() {
@@ -226,8 +242,6 @@ class GameViewController: UIViewController {
         musicControl.playBackgroundMusic()
         print("backgroundMusicButtonTapped")
     }
-    
-    
     
     @objc func vibrationButtonTapped() {
         defaults.vibrationIsOn.toggle()

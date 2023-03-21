@@ -23,6 +23,12 @@ class GameScene: SKScene {
     var bulletTimerShot: Timer?
     var delayToShot = 0.1
     let platformImage = SKSpriteNode(imageNamed: "platform")
+    var scoreCallBack: ((Int) -> ())?
+    var score = 0 {
+        didSet {
+            scoreCallBack!(score)
+        }
+    }
     
     let musicSoundEffects = MusicManager.shared
     
@@ -67,6 +73,7 @@ class GameScene: SKScene {
         platform.physicsBody?.isDynamic = false
         platform.physicsBody?.affectedByGravity = false
         platform.physicsBody?.categoryBitMask = BitMasks.platform
+        platform.zPosition = -2
         
         addChild(platform)
         addChild(platformImage)
@@ -147,6 +154,8 @@ extension GameScene: SKPhysicsContactDelegate {
             contactPlanetWithBullet.bodyB.node?.removeFromParent()
             guard let planet = contactPlanetWithBullet.bodyA.node as? Planet else { return }
             planet.lives -= 1
+            score += 1
+            scoreCallBack?(score)
             if planet.lives < 1 {
                 createExplosion(position: planet.position)
                 planet.replaceWithTwoSmaller()

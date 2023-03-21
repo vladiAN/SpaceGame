@@ -13,7 +13,7 @@ class ButtonFactory {
         let button = UIButton()
         let configImage = UIImage.SymbolConfiguration(pointSize: 23, weight: .regular, scale: .large)
         button.setImage(UIImage(systemName: imageName, withConfiguration: configImage), for: .normal)
-        button.imageView?.tintColor = #colorLiteral(red: 0, green: 0.9802040458, blue: 1, alpha: 1)
+        button.imageView?.tintColor = #colorLiteral(red: 0.01476755552, green: 0.9785382152, blue: 1, alpha: 1)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }

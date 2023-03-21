@@ -38,11 +38,12 @@ class ImagePickerVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .brown
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.85)
         
         settingsCloseButton()
         setupStackImage()
         redBorderBTouch()
+       
     }
     
     func settingsCloseButton() {
@@ -115,7 +116,7 @@ class ImagePickerVC: UIViewController {
     
     @objc func selectImage(_ sender: UIButton) {
         sender.layer.borderWidth = 5
-        sender.layer.borderColor = UIColor.red.cgColor
+        sender.layer.borderColor = UIColor.white.cgColor
         
         let index = sender.tag
         let imageName = strs[index]
