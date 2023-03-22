@@ -71,7 +71,7 @@ class GameViewController: UIViewController {
         skView.ignoresSiblingOrder = true
 //        skView.showsFPS = true
 //        skView.showsNodeCount = true
-//        skView.showsPhysics = true
+        skView.showsPhysics = true
         
         musicControl.loadSoundEffects()
         musicControl.playBackgroundMusic()
@@ -177,7 +177,9 @@ class GameViewController: UIViewController {
     @objc func changeBackgoundButtonTapped() {
         vibration.tapOnButton()
         musicControl.soundEffects(fileName: "click")
+        scene.isPaused = true
         let vc = ImagePickerVC()
+        vc.gameVC = self
         vc.modalPresentationStyle = .overFullScreen
         vc.strs = ["background1", "background2", "background3", "background4", "background5", "background6"]
         vc.callBack = { str in
@@ -198,6 +200,7 @@ class GameViewController: UIViewController {
     @objc func changeSkinShipButtonTapped() {
         vibration.tapOnButton()
         musicControl.soundEffects(fileName: "click")
+        scene.isPaused = true
         let vc = ImagePickerVC()
         vc.modalPresentationStyle = .overFullScreen
         vc.strs = ["ship1", "ship2", "ship3", "ship4", "ship5", "ship6"]

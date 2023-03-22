@@ -13,11 +13,11 @@ class StarShip {
         let starShipWidth: CGFloat = 60
         let starShipHeight: CGFloat = 70
         var starShipTexture = SKTexture()
-//        if let imageName = UserDefaults.standard.string(forKey: "skinShip") {
-            if let starShipImage = UIImage(named: imageName) {
-                starShipTexture = SKTexture(image: starShipImage)
-            }
-//        }
+        
+        if let starShipImage = UIImage(named: imageName) {
+            starShipTexture = SKTexture(image: starShipImage)
+        }
+        
         let starShip = SKSpriteNode(texture: starShipTexture)
         let starshipSize = CGSize(width: starShipWidth, height: starShipHeight)
         starShip.size = CGSize(width: starshipSize.width, height: starshipSize.height)

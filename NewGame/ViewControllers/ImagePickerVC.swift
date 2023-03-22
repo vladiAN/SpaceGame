@@ -9,6 +9,7 @@ import UIKit
 
 class ImagePickerVC: UIViewController {
 
+    weak var gameVC: GameViewController?
     
     let closeButton = ButtonFactory.createButton(imageName: "xmark.circle")
     
@@ -45,6 +46,7 @@ class ImagePickerVC: UIViewController {
         redBorderBTouch()
        
     }
+
     
     func settingsCloseButton() {
         closeButton.addTarget(self, action: #selector(closeWindow), for: .touchUpInside)
@@ -59,13 +61,17 @@ class ImagePickerVC: UIViewController {
     
     @objc func closeWindow() {
         self.dismiss(animated: true)
+
+        gameVC?.scene.isPaused = false
     }
     
     func setupStackImage() {
         let rows = 2
         let cols = 3
         
-        bigStackImage.spacing = 8
+        let spasingInStack: CGFloat = 18
+        
+        bigStackImage.spacing = spasingInStack
         bigStackImage.axis = .vertical
         bigStackImage.distribution = .fillEqually
         
@@ -74,7 +80,7 @@ class ImagePickerVC: UIViewController {
         for _ in 0..<rows {
             
             let smallStack = UIStackView()
-            smallStack.spacing = 8
+            smallStack.spacing = spasingInStack
             smallStack.axis = .horizontal
             smallStack.distribution = .fillEqually
 
@@ -99,7 +105,7 @@ class ImagePickerVC: UIViewController {
         
         NSLayoutConstraint.activate([
             bigStackImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            bigStackImage.topAnchor.constraint(equalTo: closeButton.bottomAnchor),
+            bigStackImage.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 40),
             bigStackImage.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: multiplierForWidthAnchor),
             bigStackImage.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: multiplierForHeightAnchor)
         ])
@@ -117,6 +123,7 @@ class ImagePickerVC: UIViewController {
     @objc func selectImage(_ sender: UIButton) {
         sender.layer.borderWidth = 5
         sender.layer.borderColor = UIColor.white.cgColor
+        sender.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         
         let index = sender.tag
         let imageName = strs[index]
@@ -125,6 +132,7 @@ class ImagePickerVC: UIViewController {
         for i in arrayButtonImage {
             if i != sender {
                 i.layer.borderWidth = 0
+                i.transform = .identity
             }
         }
     }

@@ -30,15 +30,20 @@ class GameScene: SKScene {
         }
     }
     
+    var deltaXPosition: CGFloat = 0
+    
     let musicSoundEffects = MusicManager.shared
     
     override func didMove(to view: SKView) {
+        
         scene?.size = view.frame.size
                 
         physicsWorld.contactDelegate = self
         
         setScene()
     }
+    
+    
     
     func setScene() {
         setBorderBody()
@@ -53,7 +58,20 @@ class GameScene: SKScene {
         } else {
             starShip = StarShip.setStarship(at: CGPoint(x: frame.midX, y: frame.minY + 100), imageName: UserDefaults.standard.string(forKey: "skinShip")!)
         }
+        
         addChild(starShip)
+    }
+    
+    func setBoundariesForStarShip() {
+        let starShipHalfWidth = starShip.frame.width / 2
+        let starShipMaxX = size.width - starShipHalfWidth
+        let starShipMinX = starShipHalfWidth
+        
+        if starShip.position.x > starShipMaxX {
+            starShip.position.x = starShipMaxX
+        } else if starShip.position.x < starShipMinX {
+            starShip.position.x = starShipMinX
+        }
     }
     
     func setBorderBody() {
@@ -123,11 +141,22 @@ class GameScene: SKScene {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let touchLocation = touch.location(in: self)
-            starShip.position.x = touchLocation.x
+            switch deltaXPosition {
+            case let delta where delta > 0:
+                starShip.position.x = touchLocation.x - deltaXPosition
+            case let delta where delta < 0:
+                starShip.position.x = touchLocation.x + abs(deltaXPosition)
+            default:
+                starShip.position.x = touchLocation.x
+            }
+            setBoundariesForStarShip()
         }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        deltaXPosition = touch.location(in: self).x - starShip.position.x
+        
         setBullet()
         let action = SKAction.repeatForever(.sequence([
             .wait(forDuration: delayToShot),
@@ -196,6 +225,9 @@ extension GameScene: SKPhysicsContactDelegate {
             }
         }
         
+//        if let contactPlanetWithBorder = contact.hasContact(contact: contact, categoryA: BitMasks.planet, categoryB: BitMasks.starShip) {
+//            
+//        }
+        
     }
 }
-
