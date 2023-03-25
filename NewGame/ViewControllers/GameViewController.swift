@@ -56,11 +56,22 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setScene()
+        
+    }
+    
+    func setScene() {
+        
+        for subview in view.subviews {
+            subview.removeFromSuperview()
+        }
+        
         let skView = SKView(frame: view.frame)
         self.view.addSubview(skView)
         
+        
         scene.scoreCallBack = { [weak self] score in
-            self?.scoreLabel.text = "Score \(score)"
+            self?.scoreLabel.text = "Score: \(score)"
         }
         
         scene.scaleMode = .aspectFill
@@ -79,6 +90,10 @@ class GameViewController: UIViewController {
         effectsControlButtonsArray = [musicEffectsButton, backgroundMusicButton, vibrationButton]
         effectsControlButtonsArray?.forEach { (btn) in
             btn.isHidden = true
+        }
+        
+        scene.restartCallBack = { [weak self] in
+            self?.setScene()
         }
         
         settingsTargetButton()
@@ -202,6 +217,7 @@ class GameViewController: UIViewController {
         musicControl.soundEffects(fileName: "click")
         scene.isPaused = true
         let vc = ImagePickerVC()
+        vc.gameVC = self
         vc.modalPresentationStyle = .overFullScreen
         vc.strs = ["ship1", "ship2", "ship3", "ship4", "ship5", "ship6"]
         vc.multiplierForWidthAnchor = 0.5
@@ -209,7 +225,7 @@ class GameViewController: UIViewController {
         vc.callBack = { str in
             self.setShipSkin(imageName: str)
             self.scene.starShip.removeFromParent()
-            self.scene.createStarShip(imageName: str)
+            UserDefaults.standard.set(str, forKey: "skinShip")
             
         }
         

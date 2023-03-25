@@ -17,6 +17,7 @@ class UserDefaultManager {
     private let vibrationKey = "vibration"
     private let backgroundImageKey = "imageBackground"
     private let skinShipImageKey = "skinShip"
+    private let bestScoreKey = "bestScore"
     
     private init() {
         defaults.register(defaults: [
@@ -24,8 +25,8 @@ class UserDefaultManager {
             backgroundMusicKey : true,
             vibrationKey : true,
             backgroundImageKey : "background1",
-            skinShipImageKey : "ship1"
-            
+            skinShipImageKey : "ship1",
+            bestScoreKey: 0
         ])
     }
     

@@ -1,5 +1,5 @@
 //
-//  Extention.swift
+//  Extension.swift
 //  NewGame
 //
 //  Created by Алина Андрушок on 20.03.2023.

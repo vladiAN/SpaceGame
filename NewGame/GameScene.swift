@@ -14,42 +14,43 @@ struct BitMasks {
     static let planet: UInt32 = 4
     static let platform: UInt32 = 8
     static let bullet: UInt32 = 16
+    static let bonus: UInt32 = 32
 }
 
 class GameScene: SKScene {
-
+    
     var starShip: SKSpriteNode!
-    var bullet: SKSpriteNode!
     var bulletTimerShot: Timer?
     var delayToShot = 0.1
     let platformImage = SKSpriteNode(imageNamed: "platform")
     var scoreCallBack: ((Int) -> ())?
+    var restartCallBack: (() -> ())?
     var score = 0 {
         didSet {
             scoreCallBack!(score)
         }
     }
+    var isNewRecord = false
     
     var deltaXPosition: CGFloat = 0
-    
+
     let musicSoundEffects = MusicManager.shared
     
     override func didMove(to view: SKView) {
         
         scene?.size = view.frame.size
-                
+        
         physicsWorld.contactDelegate = self
         
         setScene()
     }
-    
-    
     
     func setScene() {
         setBorderBody()
         createStarShip(imageName: nil)
         createPlanet()
         setPlatform()
+        
     }
     
     func createStarShip(imageName: String?) {
@@ -60,6 +61,17 @@ class GameScene: SKScene {
         }
         
         addChild(starShip)
+    }
+    
+    func createBonus(position: CGPoint) {
+        let bonus = Bonus.setBonus()
+        bonus.position = position
+        addChild(bonus)
+    }
+    
+    func chanceToBonus(probability: Int) -> Bool {
+        let randomInt = Int.random(in: 0...100)
+        return randomInt <= probability
     }
     
     func setBoundariesForStarShip() {
@@ -96,29 +108,6 @@ class GameScene: SKScene {
         addChild(platform)
         addChild(platformImage)
     }
-
-    @objc func setBullet() {
-        bullet = SKSpriteNode(imageNamed: "bullet")
-        bullet.size = CGSize(width: 20, height: 20)
-        bullet.position.y = starShip.frame.maxY
-        bullet.position.x = starShip.position.x
-        
-        bullet.physicsBody = SKPhysicsBody(circleOfRadius: bullet.size.width / 2)
-        bullet.physicsBody?.categoryBitMask = BitMasks.bullet
-        bullet.physicsBody?.collisionBitMask = 0
-        bullet.physicsBody?.affectedByGravity = false
-        bullet.physicsBody?.isDynamic = false
-
-        bullet.zRotation = CGFloat.pi / 4
-        bullet.zPosition = -1
-        
-        addChild(bullet)
-        
-        let moveUpAction = SKAction.moveBy(x: 0, y: self.frame.height, duration: 1.0)
-        let removeBullet = SKAction.removeFromParent()
-        let sequense = SKAction.sequence([moveUpAction, removeBullet])
-        bullet.run(sequense)
-    }
     
     func createPlanet() {
         let planet = PlanetFactory.createNewPlanet(frame: frame)
@@ -136,6 +125,63 @@ class GameScene: SKScene {
         explosion.zPosition = 15
         explosion.run(removeExplosion)
         addChild(explosion)
+    }
+    
+    func createBullet(deviation: CGFloat) {
+        
+        let bullet = Bullet(starShip: starShip)
+        addChild(bullet)
+        bullet.setShot(bullet: bullet, deviation: deviation, bulletAltitude: self.frame.height)
+    }
+    
+    func bulletBonus() {
+        let bulletLeft = Bullet(starShip: starShip)
+        let bulletRight = Bullet(starShip: starShip)
+        
+        addChild(bulletLeft)
+        addChild(bulletRight)
+        
+        bulletLeft.setShot(bullet: bulletLeft, deviation: -100, bulletAltitude: self.frame.height)
+        bulletRight.setShot(bullet: bulletRight, deviation: 100, bulletAltitude: self.frame.height)
+    }
+    
+    func setShot() {
+        let action = SKAction.repeatForever(.sequence([
+            .wait(forDuration: delayToShot),
+            .run {
+                self.createBullet(deviation: 0)
+            }
+        ]))
+        self.run(action, withKey: "bullet")
+    }
+
+    func ghostBonus() {
+        starShip.alpha = 0.5
+        starShip.physicsBody?.contactTestBitMask = BitMasks.bonus
+        let backToNormal = SKAction.sequence([
+            .wait(forDuration: 5),
+            .run { [weak self] in
+                self!.starShip.alpha = 1
+                self!.starShip.physicsBody?.contactTestBitMask = BitMasks.bonus | BitMasks.planet
+            }
+        ])
+        self.run(backToNormal)
+    }
+    
+    
+    func gameOver() {
+        let bestScore = UserDefaults.standard.integer(forKey: "bestScore")
+        if score > bestScore {
+            UserDefaults.standard.set(score, forKey: "bestScore")
+            isNewRecord = true
+        }
+        let gameOver = GameOver(size: self.size, isNewRecord: isNewRecord) { [weak self] in
+            self?.removeAllChildren()
+            self?.score = 0
+            self?.restartCallBack!()
+        }
+        gameOver.position = CGPoint(x: frame.midX, y: frame.midY)
+        addChild(gameOver)
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -156,15 +202,7 @@ class GameScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         deltaXPosition = touch.location(in: self).x - starShip.position.x
-        
-        setBullet()
-        let action = SKAction.repeatForever(.sequence([
-            .wait(forDuration: delayToShot),
-            .run {
-                self.setBullet()
-            }
-        ]))
-        self.run(action, withKey: "bullet")
+        setShot()
         musicSoundEffects.shotEffects()
     }
     
@@ -187,6 +225,9 @@ extension GameScene: SKPhysicsContactDelegate {
             scoreCallBack?(score)
             if planet.lives < 1 {
                 createExplosion(position: planet.position)
+                if chanceToBonus(probability: 30) { //шанс на випадання бонусу
+                    createBonus(position: planet.position)
+                }
                 planet.replaceWithTwoSmaller()
                 let planetInSceneArray = self.children.filter({ $0 is Planet})
                 print(planetInSceneArray.count)
@@ -198,18 +239,18 @@ extension GameScene: SKPhysicsContactDelegate {
                         createPlanet()
                     }
                 default: return
-
+                    
                 }
             }
         }
-
+        
         if let contactPlanetWithBorder = contact.hasContact(contact: contact, categoryA: BitMasks.planet, categoryB: BitMasks.borderBody) {
             if let planet = contactPlanetWithBorder.bodyA.node as? Planet {
                 planet.impulsFromBorder(planetOnTheLeft: planet.position.x < frame.midX)
             }
         }
-
-        if let contactPlanetWithPlatform =  contact.hasContact(contact: contact, categoryA: BitMasks.planet, categoryB: BitMasks.platform) {
+        
+        if let contactPlanetWithPlatform = contact.hasContact(contact: contact, categoryA: BitMasks.planet, categoryB: BitMasks.platform) {
             musicSoundEffects.soundEffects(fileName: "ballDrop")
             if let planet = contactPlanetWithPlatform.bodyA.node as? Planet {
                 switch planet.size.width {
@@ -225,9 +266,37 @@ extension GameScene: SKPhysicsContactDelegate {
             }
         }
         
-//        if let contactPlanetWithBorder = contact.hasContact(contact: contact, categoryA: BitMasks.planet, categoryB: BitMasks.starShip) {
-//            
-//        }
+        if contact.hasContact(contact: contact, categoryA: BitMasks.planet, categoryB: BitMasks.starShip) != nil {
+            createExplosion(position: starShip.position)
+            starShip.removeFromParent()
+            gameOver()
+        }
         
+        if let contactStarShipWithBonus = contact.hasContact(contact: contact, categoryA: BitMasks.starShip, categoryB: BitMasks.bonus) {
+            
+            if let bonusName = contactStarShipWithBonus.bodyB.node?.name as? String {
+                switch bonusName {
+                case "ghost":
+                    ghostBonus()
+                    guard contactStarShipWithBonus.bodyB.node?.removeFromParent() != nil else { return }
+                case "explosion":
+                    let planetInSceneArray = self.children.filter({ $0 is Planet})
+                    for i in planetInSceneArray {
+                        if let planet = i as? Planet {
+                            score += planet.lives
+                        }
+                        createExplosion(position: i.position)
+                        i.removeFromParent()
+                    }
+                    createPlanet()
+                    guard contactStarShipWithBonus.bodyB.node?.removeFromParent() != nil else { return }
+                case "3bullet":
+                    
+                    guard contactStarShipWithBonus.bodyB.node?.removeFromParent() != nil else { return }
+                default:
+                    return
+                }
+            }
+        }
     }
 }

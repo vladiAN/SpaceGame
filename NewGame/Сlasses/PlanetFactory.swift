@@ -28,7 +28,7 @@ class Planet: SKSpriteNode {
         self.physicsBody?.restitution = 1
         self.physicsBody?.linearDamping = 0
         self.physicsBody?.categoryBitMask = BitMasks.planet
-        self.physicsBody?.contactTestBitMask = BitMasks.borderBody | BitMasks.bullet | BitMasks.platform | BitMasks.starShip
+        self.physicsBody?.contactTestBitMask = BitMasks.borderBody | BitMasks.bullet | BitMasks.platform //| BitMasks.starShip
         self.physicsBody?.collisionBitMask = BitMasks.platform
         
         labelNumber.fontName = "HelveticaNeue-Bold"
@@ -92,7 +92,7 @@ class Planet: SKSpriteNode {
             childPlanet.physicsBody?.isDynamic = true
             childPlanet.physicsBody?.applyImpulse(impulseVector)
             childPlanet.physicsBody?.categoryBitMask = BitMasks.planet
-            childPlanet.physicsBody?.contactTestBitMask = BitMasks.borderBody | BitMasks.platform | BitMasks.bullet | BitMasks.starShip
+            childPlanet.physicsBody?.contactTestBitMask = BitMasks.borderBody | BitMasks.platform | BitMasks.bullet //| BitMasks.starShip
             childPlanet.physicsBody?.collisionBitMask = BitMasks.borderBody | BitMasks.platform
         }
         childPlanet.run(setPhysicsBody)

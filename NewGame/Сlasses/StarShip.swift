@@ -20,11 +20,12 @@ class StarShip {
         
         let starShip = SKSpriteNode(texture: starShipTexture)
         let starshipSize = CGSize(width: starShipWidth, height: starShipHeight)
-        starShip.size = CGSize(width: starshipSize.width, height: starshipSize.height)
+        starShip.size = starshipSize
         starShip.position = point
         starShip.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: starShipWidth, height: starShipHeight))
         starShip.physicsBody?.isDynamic = false
         starShip.physicsBody?.categoryBitMask = BitMasks.starShip
+        starShip.physicsBody?.contactTestBitMask = BitMasks.bonus | BitMasks.planet
         return starShip
     }
 }

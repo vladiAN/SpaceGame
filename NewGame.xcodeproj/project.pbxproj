@@ -20,7 +20,7 @@
 		C0C7E7A229B639CC000A120A /* click.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C0C7E7A129B639CB000A120A /* click.mp3 */; };
 		C0D96E1829C86EFA007ED96D /* Explosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = C0D96E1629C86EFA007ED96D /* Explosion.sks */; };
 		C0D96E1929C86EFA007ED96D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0D96E1729C86EFA007ED96D /* Assets.xcassets */; };
-		C0D96E1B29C8B822007ED96D /* Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D96E1A29C8B822007ED96D /* Extention.swift */; };
+		C0D96E1B29C8B822007ED96D /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D96E1A29C8B822007ED96D /* Extension.swift */; };
 		C0E50A8329A6234D00DA8F45 /* StarShip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E50A8229A6234D00DA8F45 /* StarShip.swift */; };
 		C0E50A8729A6620C00DA8F45 /* PlanetFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E50A8629A6620C00DA8F45 /* PlanetFactory.swift */; };
 		C0EABF1529B0E38900AF4FC1 /* MusicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EABF1429B0E38900AF4FC1 /* MusicManager.swift */; };
@@ -28,6 +28,9 @@
 		C0EABF1D29B21F2700AF4FC1 /* ballSeparation.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C0EABF1C29B21F2700AF4FC1 /* ballSeparation.mp3 */; };
 		C0EAC39729B242C500E1FB3C /* ballDrop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C0EAC39629B242C400E1FB3C /* ballDrop.mp3 */; };
 		C0EAC39929B243C500E1FB3C /* shot.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C0EAC39829B243C500E1FB3C /* shot.mp3 */; };
+		C0EAD2C729CB7F7900EEEBCF /* GameOver.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EAD2C629CB7F7900EEEBCF /* GameOver.swift */; };
+		C0EAD2C929CB857600EEEBCF /* Bonus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EAD2C829CB857600EEEBCF /* Bonus.swift */; };
+		C0ED90BF29CC87A50025274A /* Bullet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0ED90BE29CC87A50025274A /* Bullet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,7 +48,7 @@
 		C0C7E7A129B639CB000A120A /* click.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = click.mp3; sourceTree = "<group>"; };
 		C0D96E1629C86EFA007ED96D /* Explosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Explosion.sks; sourceTree = "<group>"; };
 		C0D96E1729C86EFA007ED96D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		C0D96E1A29C8B822007ED96D /* Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extention.swift; sourceTree = "<group>"; };
+		C0D96E1A29C8B822007ED96D /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		C0E50A8229A6234D00DA8F45 /* StarShip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarShip.swift; sourceTree = "<group>"; };
 		C0E50A8629A6620C00DA8F45 /* PlanetFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetFactory.swift; sourceTree = "<group>"; };
 		C0EABF1429B0E38900AF4FC1 /* MusicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicManager.swift; sourceTree = "<group>"; };
@@ -53,6 +56,9 @@
 		C0EABF1C29B21F2700AF4FC1 /* ballSeparation.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ballSeparation.mp3; sourceTree = "<group>"; };
 		C0EAC39629B242C400E1FB3C /* ballDrop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ballDrop.mp3; sourceTree = "<group>"; };
 		C0EAC39829B243C500E1FB3C /* shot.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = shot.mp3; sourceTree = "<group>"; };
+		C0EAD2C629CB7F7900EEEBCF /* GameOver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOver.swift; sourceTree = "<group>"; };
+		C0EAD2C829CB857600EEEBCF /* Bonus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bonus.swift; sourceTree = "<group>"; };
+		C0ED90BE29CC87A50025274A /* Bullet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bullet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,7 +94,7 @@
 			children = (
 				C0568CF529A4C88A00BB9181 /* AppDelegate.swift */,
 				C0568CFB29A4C88A00BB9181 /* GameScene.swift */,
-				C0D96E1A29C8B822007ED96D /* Extention.swift */,
+				C0D96E1A29C8B822007ED96D /* Extension.swift */,
 				C0D96E1629C86EFA007ED96D /* Explosion.sks */,
 				C0D96E1729C86EFA007ED96D /* Assets.xcassets */,
 				C0CFF97B29B9D714002DD5CF /* ViewControllers */,
@@ -113,6 +119,9 @@
 		C0C7E7A429B72F7D000A120A /* Сlasses */ = {
 			isa = PBXGroup;
 			children = (
+				C0EAD2C629CB7F7900EEEBCF /* GameOver.swift */,
+				C0EAD2C829CB857600EEEBCF /* Bonus.swift */,
+				C0ED90BE29CC87A50025274A /* Bullet.swift */,
 				C0E50A8229A6234D00DA8F45 /* StarShip.swift */,
 				C0E50A8629A6620C00DA8F45 /* PlanetFactory.swift */,
 				C0C7E79D29B600E5000A120A /* ButtonFactory.swift */,
@@ -229,7 +238,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C0568CFC29A4C88A00BB9181 /* GameScene.swift in Sources */,
+				C0EAD2C929CB857600EEEBCF /* Bonus.swift in Sources */,
 				C0C7E79E29B600E5000A120A /* ButtonFactory.swift in Sources */,
+				C0ED90BF29CC87A50025274A /* Bullet.swift in Sources */,
+				C0EAD2C729CB7F7900EEEBCF /* GameOver.swift in Sources */,
 				C0C7E7A029B62ECE000A120A /* UserDefaultManager.swift in Sources */,
 				C00437AB29B8906C00C35413 /* VibrationManager.swift in Sources */,
 				C0568CFE29A4C88A00BB9181 /* GameViewController.swift in Sources */,
@@ -237,7 +249,7 @@
 				C0E50A8329A6234D00DA8F45 /* StarShip.swift in Sources */,
 				C0E50A8729A6620C00DA8F45 /* PlanetFactory.swift in Sources */,
 				C00437AD29B8B7A900C35413 /* ImagePickerVC.swift in Sources */,
-				C0D96E1B29C8B822007ED96D /* Extention.swift in Sources */,
+				C0D96E1B29C8B822007ED96D /* Extension.swift in Sources */,
 				C0EABF1529B0E38900AF4FC1 /* MusicManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
