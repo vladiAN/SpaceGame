@@ -18,5 +18,4 @@ class ButtonFactory {
         return button
     }
     
-    
 }

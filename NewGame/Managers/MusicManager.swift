@@ -40,13 +40,21 @@ class MusicManager {
         }
     }
     
+    func stopBackgroundMusic() {
+        bgAudioPlayer?.stop()
+        bgAudioPlayer = nil
+    }
+    
     func loadSoundEffects() {
         
         let soundEffectsFiles = [
             "shot",
             "ballDrop",
             "ballSeparation",
-            "click"
+            "click",
+            "game_over",
+            "ghostBonus",
+            "explosion"
         ]
         
         for file in soundEffectsFiles {

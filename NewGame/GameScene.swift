@@ -19,6 +19,8 @@ struct BitMasks {
 
 class GameScene: SKScene {
     
+    var startSlide: StartSlide?
+    
     var starShip: SKSpriteNode!
     var bulletTimerShot: Timer?
     var delayToShot = 0.1
@@ -31,6 +33,8 @@ class GameScene: SKScene {
         }
     }
     var isNewRecord = false
+    var isBonusShot = false
+    var isStartGame = false
     
     var deltaXPosition: CGFloat = 0
 
@@ -48,10 +52,13 @@ class GameScene: SKScene {
     func setScene() {
         setBorderBody()
         createStarShip(imageName: nil)
-        createPlanet()
+        //createPlanet()
         setPlatform()
+        setStartSlide()
         
     }
+    
+    
     
     func createStarShip(imageName: String?) {
         if let imageName {
@@ -128,31 +135,30 @@ class GameScene: SKScene {
     }
     
     func createBullet(deviation: CGFloat) {
-        
         let bullet = Bullet(starShip: starShip)
         addChild(bullet)
         bullet.setShot(bullet: bullet, deviation: deviation, bulletAltitude: self.frame.height)
     }
     
-    func bulletBonus() {
-        let bulletLeft = Bullet(starShip: starShip)
-        let bulletRight = Bullet(starShip: starShip)
-        
-        addChild(bulletLeft)
-        addChild(bulletRight)
-        
-        bulletLeft.setShot(bullet: bulletLeft, deviation: -100, bulletAltitude: self.frame.height)
-        bulletRight.setShot(bullet: bulletRight, deviation: 100, bulletAltitude: self.frame.height)
-    }
     
     func setShot() {
-        let action = SKAction.repeatForever(.sequence([
+        if isBonusShot {
+            self.createBullet(deviation: 0)
+            self.createBullet(deviation: -100)
+            self.createBullet(deviation: 100)
+        } else {
+            self.createBullet(deviation: 0)
+        }
+    }
+    
+    func shooting() {
+        let shooting = SKAction.repeatForever(.sequence([
             .wait(forDuration: delayToShot),
             .run {
-                self.createBullet(deviation: 0)
+                self.setShot()
             }
         ]))
-        self.run(action, withKey: "bullet")
+        self.run(shooting, withKey: "shooting")
     }
 
     func ghostBonus() {
@@ -167,7 +173,14 @@ class GameScene: SKScene {
         ])
         self.run(backToNormal)
     }
-    
+   
+    func setStartSlide() {
+        startSlide = StartSlide(frame: frame)
+        if let startSlide = startSlide {
+            addChild(startSlide)
+        }
+        
+    }
     
     func gameOver() {
         let bestScore = UserDefaults.standard.integer(forKey: "bestScore")
@@ -179,6 +192,7 @@ class GameScene: SKScene {
             self?.removeAllChildren()
             self?.score = 0
             self?.restartCallBack!()
+            self?.isStartGame = false
         }
         gameOver.position = CGPoint(x: frame.midX, y: frame.midY)
         addChild(gameOver)
@@ -200,14 +214,19 @@ class GameScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        startSlide?.removeFromParent()
+        if isStartGame == false {
+            createPlanet()
+            isStartGame = true
+        }
         guard let touch = touches.first else { return }
         deltaXPosition = touch.location(in: self).x - starShip.position.x
-        setShot()
+        shooting()
         musicSoundEffects.shotEffects()
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.removeAction(forKey: "bullet")
+        self.removeAction(forKey: "shooting")
         musicSoundEffects.shotEffectsStop()
     }
     
@@ -267,8 +286,12 @@ extension GameScene: SKPhysicsContactDelegate {
         }
         
         if contact.hasContact(contact: contact, categoryA: BitMasks.planet, categoryB: BitMasks.starShip) != nil {
+            musicSoundEffects.soundEffects(fileName: "ballSeparation")
+            musicSoundEffects.stopBackgroundMusic()
+            musicSoundEffects.soundEffects(fileName: "game_over")
             createExplosion(position: starShip.position)
             starShip.removeFromParent()
+            self.removeAction(forKey: "shooting")
             gameOver()
         }
         
@@ -277,9 +300,11 @@ extension GameScene: SKPhysicsContactDelegate {
             if let bonusName = contactStarShipWithBonus.bodyB.node?.name as? String {
                 switch bonusName {
                 case "ghost":
+                    musicSoundEffects.soundEffects(fileName: "ghostBonus")
                     ghostBonus()
                     guard contactStarShipWithBonus.bodyB.node?.removeFromParent() != nil else { return }
                 case "explosion":
+                    musicSoundEffects.soundEffects(fileName: "explosion")
                     let planetInSceneArray = self.children.filter({ $0 is Planet})
                     for i in planetInSceneArray {
                         if let planet = i as? Planet {
@@ -291,7 +316,13 @@ extension GameScene: SKPhysicsContactDelegate {
                     createPlanet()
                     guard contactStarShipWithBonus.bodyB.node?.removeFromParent() != nil else { return }
                 case "3bullet":
-                    
+                    isBonusShot = true
+                    self.run(SKAction.sequence([
+                        .wait(forDuration: 5),
+                        .run {
+                            self.isBonusShot = false
+                        }
+                    ]))
                     guard contactStarShipWithBonus.bodyB.node?.removeFromParent() != nil else { return }
                 default:
                     return
