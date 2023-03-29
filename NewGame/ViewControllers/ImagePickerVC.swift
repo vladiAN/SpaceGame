@@ -11,7 +11,16 @@ class ImagePickerVC: UIViewController {
 
     weak var gameVC: GameViewController?
     
-    let closeButton = ButtonFactory.createButton(imageName: "xmark.circle")
+    let buttonSelect: UIButton = {
+        let buttonSelect = UIButton()
+        buttonSelect.backgroundColor = #colorLiteral(red: 0, green: 0.9785962701, blue: 1, alpha: 1)
+        buttonSelect.layer.cornerRadius = 5
+        buttonSelect.setTitle("SELECT", for: .normal)
+        buttonSelect.setTitleColor(.black, for: .normal)
+        buttonSelect.translatesAutoresizingMaskIntoConstraints = false
+        
+        return buttonSelect
+    }()
     
     var strs: [String] = []
     lazy var arrayImageForPicker: [UIImage] = {
@@ -41,25 +50,26 @@ class ImagePickerVC: UIViewController {
         
         view.backgroundColor = UIColor.black.withAlphaComponent(0.85)
         
-        settingsCloseButton()
         setupStackImage()
+        settingsCloseButton()
         redBorderBTouch()
        
     }
 
     
     func settingsCloseButton() {
-        closeButton.addTarget(self, action: #selector(closeWindow), for: .touchUpInside)
+        buttonSelect.addTarget(self, action: #selector(closeWindow), for: .touchUpInside)
         
-        view.addSubview(closeButton)
+        viewUnderButton.addSubview(buttonSelect)
         
         NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            closeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -40)
+            buttonSelect.centerXAnchor.constraint(equalTo: viewUnderButton.centerXAnchor),
+            buttonSelect.centerYAnchor.constraint(equalTo: viewUnderButton.centerYAnchor),
             ])
     }
     
     @objc func closeWindow() {
+        MusicManager.shared.soundEffects(fileName: "click")
         self.dismiss(animated: true)
 
         gameVC?.scene.isPaused = false
@@ -105,7 +115,7 @@ class ImagePickerVC: UIViewController {
         
         NSLayoutConstraint.activate([
             bigStackImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            bigStackImage.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 40),
+            bigStackImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             bigStackImage.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: multiplierForWidthAnchor),
             bigStackImage.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: multiplierForHeightAnchor)
         ])
@@ -121,8 +131,9 @@ class ImagePickerVC: UIViewController {
     }
     
     @objc func selectImage(_ sender: UIButton) {
-        sender.layer.borderWidth = 5
+        sender.layer.borderWidth = 2
         sender.layer.borderColor = UIColor.white.cgColor
+        sender.layer.masksToBounds = true
         sender.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         
         let index = sender.tag

@@ -6,7 +6,6 @@
 //
 
 import UIKit
-//import SpriteKit
 import GameplayKit
 
 
@@ -28,6 +27,10 @@ enum ImageName{
 
 
 class GameViewController: UIViewController {
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
     
     let musicControl = MusicManager.shared
     let defaults = UserDefaultManager.shared
@@ -80,7 +83,7 @@ class GameViewController: UIViewController {
         
         skView.allowsTransparency = true
         skView.ignoresSiblingOrder = true
-//        skView.showsFPS = true
+        skView.showsFPS = true
 //        skView.showsNodeCount = true
         skView.showsPhysics = true
         
@@ -220,13 +223,13 @@ class GameViewController: UIViewController {
         vc.gameVC = self
         vc.modalPresentationStyle = .overFullScreen
         vc.strs = ["ship1", "ship2", "ship3", "ship4", "ship5", "ship6"]
-        vc.multiplierForWidthAnchor = 0.5
-        vc.multiplierForHeightAnchor = 0.3
+        vc.multiplierForWidthAnchor = 0.7
+        vc.multiplierForHeightAnchor = 0.4
         vc.callBack = { str in
             self.setShipSkin(imageName: str)
             self.scene.starShip.removeFromParent()
             UserDefaults.standard.set(str, forKey: "skinShip")
-            
+            self.scene.createStarShip(imageName: nil)
         }
         
         present(vc, animated: true)

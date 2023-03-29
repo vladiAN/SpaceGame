@@ -288,6 +288,7 @@ extension GameScene: SKPhysicsContactDelegate {
         if contact.hasContact(contact: contact, categoryA: BitMasks.planet, categoryB: BitMasks.starShip) != nil {
             musicSoundEffects.soundEffects(fileName: "ballSeparation")
             musicSoundEffects.stopBackgroundMusic()
+            musicSoundEffects.shotEffectsStop()
             musicSoundEffects.soundEffects(fileName: "game_over")
             createExplosion(position: starShip.position)
             starShip.removeFromParent()

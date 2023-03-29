@@ -83,6 +83,13 @@ class Planet: SKSpriteNode {
     func setChildPlanet(childPlanet: Planet, childPlanetLeft: Bool) {
         
         childPlanet.position = position
+        
+        if childPlanet.size.width == SizePlanet.sizeNormal.rawValue {
+            childPlanet.lives = 25
+        } else if childPlanet.size.width == SizePlanet.sizeSmall.rawValue {
+            childPlanet.lives = 10
+        }
+        
         let impulseVector = childPlanetLeft ? CGVector(dx: -40, dy: 40) : CGVector(dx: 40, dy: 40)
         let setPhysicsBody = SKAction.run {
             childPlanet.physicsBody = SKPhysicsBody(circleOfRadius: childPlanet.size.height / 2)
@@ -127,8 +134,18 @@ class PlanetFactory: SKSpriteNode {
         let randomSizeArr = [SizePlanet.sizeBig, SizePlanet.sizeNormal, SizePlanet.sizeSmall]
         
         let randomSizePlanet = randomSizeArr.randomElement()!
+        
 
         let randomPlanet = Planet(size: CGSize(width: randomSizePlanet.rawValue, height: randomSizePlanet.rawValue))
+        
+        switch randomSizePlanet {
+        case .sizeBig:
+            randomPlanet.lives = 50
+        case .sizeNormal:
+            randomPlanet.lives = 40
+        case .sizeSmall:
+            randomPlanet.lives = 30
+        }
         
         let randomBool = Bool.random()
         let moveDuration = 2.0

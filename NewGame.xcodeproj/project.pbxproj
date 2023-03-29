@@ -84,7 +84,6 @@
 			isa = PBXGroup;
 			children = (
 				C0568CF429A4C88A00BB9181 /* NewGame */,
-				C0568D0229A4C88C00BB9181 /* Assets.xcassets */,
 				C0568CF329A4C88A00BB9181 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -141,6 +140,7 @@
 		C0C7E7A529B72F9E000A120A /* DefaultFiles */ = {
 			isa = PBXGroup;
 			children = (
+				C0568D0229A4C88C00BB9181 /* Assets.xcassets */,
 				C0568CFF29A4C88A00BB9181 /* Main.storyboard */,
 				C0568D0429A4C88C00BB9181 /* LaunchScreen.storyboard */,
 			);
