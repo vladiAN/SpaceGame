@@ -52,7 +52,6 @@ class GameScene: SKScene {
     func setScene() {
         setBorderBody()
         createStarShip(imageName: nil)
-        //createPlanet()
         setPlatform()
         setStartSlide()
         
@@ -183,19 +182,22 @@ class GameScene: SKScene {
     }
     
     func gameOver() {
-        let bestScore = UserDefaults.standard.integer(forKey: "bestScore")
-        if score > bestScore {
-            UserDefaults.standard.set(score, forKey: "bestScore")
-            isNewRecord = true
+        let gameOverInSceneArray = self.children.filter({ $0 is GameOver})
+        if gameOverInSceneArray.count == 0 {
+            let bestScore = UserDefaults.standard.integer(forKey: "bestScore")
+            if score > bestScore {
+                UserDefaults.standard.set(score, forKey: "bestScore")
+                isNewRecord = true
+            }
+            let gameOver = GameOver(size: self.size, isNewRecord: isNewRecord) { [weak self] in
+                self?.removeAllChildren()
+                self?.score = 0
+                self?.restartCallBack!()
+                self?.isStartGame = false
+            }
+            gameOver.position = CGPoint(x: frame.midX, y: frame.midY)
+            addChild(gameOver)
         }
-        let gameOver = GameOver(size: self.size, isNewRecord: isNewRecord) { [weak self] in
-            self?.removeAllChildren()
-            self?.score = 0
-            self?.restartCallBack!()
-            self?.isStartGame = false
-        }
-        gameOver.position = CGPoint(x: frame.midX, y: frame.midY)
-        addChild(gameOver)
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -286,6 +288,11 @@ extension GameScene: SKPhysicsContactDelegate {
         }
         
         if contact.hasContact(contact: contact, categoryA: BitMasks.planet, categoryB: BitMasks.starShip) != nil {
+            if score > UserDefaults.standard.integer(forKey: "bestScore") {
+                isNewRecord = true
+            } else {
+                isNewRecord = false
+            }
             musicSoundEffects.soundEffects(fileName: "ballSeparation")
             musicSoundEffects.stopBackgroundMusic()
             musicSoundEffects.shotEffectsStop()

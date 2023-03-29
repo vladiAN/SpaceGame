@@ -17,9 +17,9 @@ class GameOver: SKNode {
         self.zPosition = 20
         self.isUserInteractionEnabled = true
         gameOverNode(size: size)
+        addNewRecord(size: size, isNewRecord: isNewRecord)
         addBestScoreLabel(size: size)
         addRestartLabel(size: size)
-        addNewRecord(size: size, isNewRecord: isNewRecord)
     }
     
     func gameOverNode(size: CGSize) {

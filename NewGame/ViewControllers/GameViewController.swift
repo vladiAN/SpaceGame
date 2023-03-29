@@ -83,9 +83,9 @@ class GameViewController: UIViewController {
         
         skView.allowsTransparency = true
         skView.ignoresSiblingOrder = true
-        skView.showsFPS = true
+//        skView.showsFPS = true
 //        skView.showsNodeCount = true
-        skView.showsPhysics = true
+//        skView.showsPhysics = true
         
         musicControl.loadSoundEffects()
         musicControl.playBackgroundMusic()
@@ -227,9 +227,8 @@ class GameViewController: UIViewController {
         vc.multiplierForHeightAnchor = 0.4
         vc.callBack = { str in
             self.setShipSkin(imageName: str)
-            self.scene.starShip.removeFromParent()
+            self.scene.starShip.texture = SKTexture(imageNamed: str)
             UserDefaults.standard.set(str, forKey: "skinShip")
-            self.scene.createStarShip(imageName: nil)
         }
         
         present(vc, animated: true)
